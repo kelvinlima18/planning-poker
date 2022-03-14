@@ -18,6 +18,7 @@ export const Home: React.FC = () => {
     const roomData = {
       id: uuid(),
       roomname,
+      gameStarted: false
     };
 
     const userData = {

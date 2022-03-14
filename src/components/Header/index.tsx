@@ -11,8 +11,8 @@ export const Header: React.FC = () => {
         <h1>planning poker</h1>
 
         <nav>
-          <a href="#">Home</a>
-          <a href="#">Entrar em uma sala</a>
+          <a href="/#">Home</a>
+          <a href="/#">Entrar em uma sala</a>
         </nav>
       </section>
     </Container>

@@ -13,7 +13,7 @@ export const Container = styled.header`
     padding: 0 20px;
 
     h1 {
-      color: #FFFFFF;
+      color: #b3b3b3;
       letter-spacing: 2px;
       font-size: 23px;
     }

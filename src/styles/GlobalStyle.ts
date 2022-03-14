@@ -18,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: var(--background);
+    background-color: #f9f9f9;
   }
 
   body, button, input, span, textarea, select {

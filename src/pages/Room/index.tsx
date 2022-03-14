@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { PokerTable } from '../../components/PokerTable';
 import { getRoom, getPlayers } from '../../repository/firebase';
 import { RoomData, UserData } from '../../types/user';
 
@@ -8,10 +9,10 @@ import { Container } from './styles';
 export const Room: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
-  const [url, _] = useState(`${window.location.origin}/invite/${id}`);
+  const url = `${window.location.origin}/invite/${id}`;
 
   const [room, setRoom] = useState<RoomData>({} as RoomData);
-  const [user, setUser] = useState<UserData[]>([]);
+  const [users, setUsers] = useState<UserData[]>([]);
 
   useEffect(() => {
     const loadRoomData = async () => {
@@ -29,12 +30,12 @@ export const Room: React.FC = () => {
           players.push(user.data() as UserData);
         });
 
-        setUser(players);
+        setUsers(players);
       })
     };
 
     loadRoomData();
-  }, []);
+  }, [id]);
 
   const inviteGuest = () => {
     const urlInvite = document.createElement('input');
@@ -60,11 +61,13 @@ export const Room: React.FC = () => {
 
       <section>
         <h1>Room name: {room.roomname}</h1>
-        {user.map(p => (
-          <ul>
-            <li>{p.username} - {p.usertype}</li>
+        {users.map(user => (
+          <ul key={user.id}>
+            <li>{user.username} - {user.usertype} - Card: {user.card}</li>
           </ul>
         ))}
+
+        <PokerTable users={users} room={room} />
       </section>
     </Container>
   );

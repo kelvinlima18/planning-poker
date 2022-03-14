@@ -17,18 +17,27 @@ const app = firebase.initializeApp(firebaseConfig);
 firebase.analytics(app);
 const db = firebase.firestore(app);
 
-export const createRoom = async (roomData: { id: string, roomname: string }) => {
+export const createRoom = async (roomData: { id: string, roomname: string, gameStarted: boolean }) => {
   await db.collection('rooms').doc(roomData.id).set(roomData);
 }
 
 export const addPlayerToRoom = async (roomId: string, userData: UserData) => {
+  sessionStorage.setItem('user-planning-poker', JSON.stringify(userData));
   await db.collection('rooms').doc(roomId).collection('users').doc(userData.id).set(userData);
 }
 
 export const getRoom = async (roomId: string) => {
   return db.collection('rooms').doc(roomId);
 }
-
+ 
 export const getPlayers = async (roomId: string) => {
   return db.collection('rooms').doc(roomId).collection('users');
+}
+
+export const updateRoom = async (roomId: string, gameStarted: boolean) => {
+  await db.collection('rooms').doc(roomId).update({ gameStarted });
+}
+
+export const updateUserCard = async (roomId: string, userId: string, card: string) => {
+  await db.collection('rooms').doc(roomId).collection('users').doc(userId).update({ card });
 }

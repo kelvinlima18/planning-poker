@@ -63,7 +63,7 @@ export const Room: React.FC = () => {
         <h1>Room name: {room.roomname}</h1>
         {users.map(user => (
           <ul key={user.id}>
-            <li>{user.username} - {user.usertype} - Card: {user.card}</li>
+            <li>{user.username} - {user.usertype} - {room.showCards && `Card: ${user.card}`}</li>
           </ul>
         ))}
 

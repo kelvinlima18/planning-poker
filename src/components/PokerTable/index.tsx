@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { updateRoom, updateUserCard } from '../../repository/firebase';
+import { updateShowCards, updateUserCard, updateGameStatus, resetGame } from '../../repository/firebase';
 
 import { RoomData, UserData } from '../../types/user';
 
@@ -11,7 +11,7 @@ interface PokerTableProps {
   room: RoomData;
 }
 
-export const PokerTable: React.FC<PokerTableProps> = ({ room }) => {
+export const PokerTable: React.FC<PokerTableProps> = ({ room, users }) => {
   const userStorage = sessionStorage.getItem('user-planning-poker');
   const loggedUser: UserData | undefined = userStorage ? JSON.parse(userStorage) : undefined;
 
@@ -29,7 +29,7 @@ export const PokerTable: React.FC<PokerTableProps> = ({ room }) => {
     { card: '100', selected: false },
   ])
 
-  const { gameStarted } = room;
+  const { gameStarted, showCards } = room;
 
   const selectCard = (card: string) => {
     setCards(prev => prev.map(c => {
@@ -56,8 +56,20 @@ export const PokerTable: React.FC<PokerTableProps> = ({ room }) => {
             <main>
               <section>
                 {!gameStarted && (
-                  <button type="button" onClick={() => updateRoom(room.id, true)}>Start Game</button>
+                  <button type="button" onClick={() => updateGameStatus(room.id, true)}>Iniciar Votação</button>
                 )}
+                {(users.some(item => item.card !== '') && !showCards && gameStarted) && (
+                  <button type="button" onClick={() => updateShowCards(room.id, true)}>
+                    Revelar votos
+                  </button>
+                )}
+                {(showCards) && (
+                  <button type="button" onClick={() => {
+                    resetGame(room.id);
+                    updateShowCards(room.id, false);
+                  }}>Nova Votação</button>
+                )}
+
               </section>
             </main>
           )}

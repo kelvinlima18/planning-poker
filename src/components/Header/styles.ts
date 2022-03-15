@@ -5,38 +5,66 @@ export const Container = styled.header`
   height: 60px;
 
   section {
-    width: 1290px;
+    max-width: 1152px;
     margin: 0 auto;
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 0 20px;
 
     h1 {
-      color: #b3b3b3;
-      letter-spacing: 2px;
-      font-size: 23px;
+      display: flex;
+      align-items: baseline;
+      color: #ffffff;
+      letter-spacing: 1px;
+      font-size: 18px;
+
+      &::before {
+        content: "";
+        display: flex;
+        width: 5px;
+        height: 5px;
+        border-radius: 5px;
+        margin-right: 4px;
+        background-color: #ffffff;
+        position: relative;
+      }
     }
 
     nav {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin-left: 100px;
       height: 100%;
       width: 20%;
       margin-bottom: 30px;
 
       a {
-        color: #44475a;
-        font-weight: 700;
-        font-size: 16px;
+        color: #ffffff;
+        font-weight: 500;
+        font-size: 14px;
         text-decoration: none;
-        transition: color 0.4s;
+        transition: filter 0.4s;
 
         &:hover {
-          color: #FFFFFF;
+          filter: brightness(0.9);
         }
+      }
+    }
+
+    button {
+      background-color: var(--color);
+      padding: 7px 26px;
+      border: 0;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 500;
+      transition: filter 0.4s;
+
+      &:hover {
+        filter: brightness(0.9);
       }
     }
   }

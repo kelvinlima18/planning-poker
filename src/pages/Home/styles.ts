@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.main`
-  max-width: 1290px;
+  max-width: 1152px;
   height: calc(100vh - 60px);
   display: flex;
   margin: 0 auto;
@@ -13,10 +13,12 @@ export const Container = styled.main`
     max-width: 600px;
     padding: 20px;
     margin-top: 100px;
+    align-items: center;
+    margin: 80px auto 0;
     
     h2 {
-      font-size: 36px;
-      color: var(--color);
+      font-size: 38px;
+      color: #FFFFFF;
       margin: 20px 0 40px;
       letter-spacing: 1.4px;
     }
@@ -25,22 +27,23 @@ export const Container = styled.main`
       display: flex;
       flex-direction: column;
 
-      div {
+      > div {
         display: flex;
         
-        input {
-          height: 53px;
-          width: 100%;
+        > input {
+          height: 60px;
+          width: 320px;
           margin-bottom: 15px;
           border: 0;
-          font-size: 13px;
-          border-radius: 10px;
+          font-size: 16px;
+          font-weight: 500;
+          border-radius: 6px;
           padding-left: 20px;
-          background-color: var(--background-secondary);
-          color: var(--color);
+          background-color: #222222;
+          color: #646464;
 
           &::placeholder {
-            color: var(--color);  
+            color: #646464;  
           }
 
           &:first-child {
@@ -49,14 +52,31 @@ export const Container = styled.main`
         }
       }
 
-      button {
-        height: 42px;
-        border-radius: 8px;
+      .spectator-wrapper {
+        display: flex;
+        align-items: center;
+        height: 40px;
+
+        input {
+          height: 30px;
+          width: 15px;
+          margin: 0 15px;
+        }
+
+        label {
+          color: #646464;
+        }
+      }
+
+      > button {
+        height: 60px;
+        border-radius: 6px;
         border: 0;
-        font-size: 13px;
+        margin-top: 15px;
+        font-size: 18px;
         font-weight: 700;
-        background-color: var(--background-button);
-        color: var(--color);
+        background-color: var(--color);
+        color: #ffffff;
         transition: filter 0.4s;
 
         &:hover {

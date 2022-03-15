@@ -9,16 +9,17 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   :root {
-    --background: #282a36;
+    --background: #161616;
     --background-secondary: #44475a;
-    --background-button: #bd93f9;
-
-    --color: #f8f8f2;
-
+    /* --color: #1766AC; */
+    --color: #0053C3;
+    /* --color: #49BA4C; */
+    /* --color: #f9454b; */
+    /* --color: #C13D5D; */
   }
 
   body {
-    background-color: #f9f9f9;
+    background-color: var(--background);
   }
 
   body, button, input, span, textarea, select {

@@ -34,10 +34,33 @@ export const getPlayers = async (roomId: string) => {
   return db.collection('rooms').doc(roomId).collection('users');
 }
 
-export const updateRoom = async (roomId: string, gameStarted: boolean) => {
+export const updateGameStatus = async (roomId: string, gameStarted: boolean) => {
   await db.collection('rooms').doc(roomId).update({ gameStarted });
+}
+
+export const updateShowCards = async (roomId: string, showCards: boolean) => {
+  await db.collection('rooms').doc(roomId).update({ showCards });
 }
 
 export const updateUserCard = async (roomId: string, userId: string, card: string) => {
   await db.collection('rooms').doc(roomId).collection('users').doc(userId).update({ card });
+}
+
+export const resetGame = async (roomId: string) => {
+  const usersDoc =  db.collection('rooms').doc(roomId).collection('users').get();
+
+  return await usersDoc.then(querySnapshot => {
+    querySnapshot.forEach(async userDoc => {
+      return await db.runTransaction(async transaction => {
+        return await transaction.get(userDoc.ref).then(doc => {
+          if (!doc.exists) { throw 'Document does not exists!' }
+    
+          const resetGame = doc.data()!.card = '';
+          transaction.update(userDoc.ref, { card: resetGame });
+        });
+      })
+      .then(() => console.log('Deu tudo certo'))
+      .catch(err => console.log('Rapaz, alguma coisa deu errado: ', err))
+    })
+  })
 }

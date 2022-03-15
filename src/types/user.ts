@@ -9,4 +9,5 @@ export interface RoomData {
   id: string;
   roomname: string;
   gameStarted: boolean;
+  showCards: boolean;
 }

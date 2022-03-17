@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import PokerActions from '../../components/PokerActions';
 import { PokerTable } from '../../components/PokerTable';
 import { getRoom, getPlayers } from '../../repository/firebase';
 import { RoomData, UserData } from '../../types/user';
@@ -7,9 +8,11 @@ import { RoomData, UserData } from '../../types/user';
 import { Container } from './styles';
 
 export const Room: React.FC = () => {
-
   const { id } = useParams<{ id: string }>();
   const url = `${window.location.origin}/invite/${id}`;
+
+  const userStorage = sessionStorage.getItem('user-planning-poker');
+  const loggedUser: UserData | undefined = userStorage ? JSON.parse(userStorage) : undefined;
 
   const [room, setRoom] = useState<RoomData>({} as RoomData);
   const [users, setUsers] = useState<UserData[]>([]);
@@ -39,14 +42,14 @@ export const Room: React.FC = () => {
 
   const inviteGuest = () => {
     const urlInvite = document.createElement('input');
-    const container = document.getElementById('room-container');
+    const container = document.getElementById('header-wrapper');
 
     const inputAlreadyExists = container!.getElementsByClassName('input-url');
 
     if (inputAlreadyExists.length > 0) return;
 
     container!.appendChild(urlInvite);
-    urlInvite.className = 'input-url';
+    urlInvite.className = 'invite-link';
     urlInvite.value = url;
     urlInvite.select();
     document.execCommand('copy');
@@ -56,18 +59,21 @@ export const Room: React.FC = () => {
 
 
   return (
-    <Container id="room-container">
-      <button type="button" onClick={inviteGuest}>Convidar participante</button>
+    <Container>
+      <header id="header-wrapper">
+        <button type="button" onClick={inviteGuest}>Convidar</button>
+        <h1>Sala: {room.roomname}</h1>
+      </header>
 
       <section>
-        <h1>Room name: {room.roomname}</h1>
-        {users.map(user => (
-          <ul key={user.id}>
-            <li>{user.username} - {user.usertype} - {room.showCards && `Card: ${user.card}`}</li>
-          </ul>
-        ))}
-
-        <PokerTable users={users} room={room} />
+        {loggedUser === undefined ? (
+          <h2>Você não tem acesso a essa sala</h2>
+        ) : (
+          <>
+            <PokerActions loggedUser={loggedUser} users={users} room={room} />
+            <PokerTable users={users} room={room} />
+          </>
+        )}
       </section>
     </Container>
   );

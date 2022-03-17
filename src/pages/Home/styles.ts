@@ -18,7 +18,7 @@ export const Container = styled.main`
     
     h2 {
       font-size: 38px;
-      color: #FFFFFF;
+      color: #35353A;
       margin: 20px 0 40px;
       letter-spacing: 1.4px;
     }
@@ -39,11 +39,11 @@ export const Container = styled.main`
           font-weight: 500;
           border-radius: 6px;
           padding-left: 20px;
-          background-color: #222222;
-          color: #646464;
+          background-color: #e5e5e5;
+          color: #35353A;
 
           &::placeholder {
-            color: #646464;  
+            color: #35353A;  
           }
 
           &:first-child {
@@ -64,7 +64,7 @@ export const Container = styled.main`
         }
 
         label {
-          color: #646464;
+          color: #35353A;
         }
       }
 
@@ -75,12 +75,12 @@ export const Container = styled.main`
         margin-top: 15px;
         font-size: 18px;
         font-weight: 700;
-        background-color: var(--color);
+        background-color: #695AD5;
         color: #ffffff;
-        transition: filter 0.4s;
+        transition: background-color 0.4s;
 
         &:hover {
-          filter: brightness(0.9);
+          background-color: #AEA7E8;
         }
       }
     }

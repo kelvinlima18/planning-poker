@@ -9,13 +9,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   :root {
-    --background: #161616;
-    --background-secondary: #44475a;
-    /* --color: #1766AC; */
-    --color: #0053C3;
-    /* --color: #49BA4C; */
-    /* --color: #f9454b; */
-    /* --color: #C13D5D; */
+    --background: #ffffff;
   }
 
   body {

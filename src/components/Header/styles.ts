@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.header`
   max-width: 100vw;
   height: 60px;
+  background-color: #695AD5;
 
   section {
     max-width: 1152px;
@@ -42,7 +43,7 @@ export const Container = styled.header`
 
       a {
         color: #ffffff;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 14px;
         text-decoration: none;
         transition: filter 0.4s;
@@ -54,17 +55,17 @@ export const Container = styled.header`
     }
 
     button {
-      background-color: var(--color);
+      background-color: #ffffff;
       padding: 7px 26px;
       border: 0;
       border-radius: 6px;
-      color: #ffffff;
+      color: #695AD5;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       transition: filter 0.4s;
 
       &:hover {
-        filter: brightness(0.9);
+        filter: brightness(0.95);
       }
     }
   }

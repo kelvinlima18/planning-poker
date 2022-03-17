@@ -1,28 +1,32 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  .cards-game {
-    display: flex;
-    margin: 10px 20px;
+  padding: 0 20px;
   
-    .card {
+  section {
+    display: flex;
+    flex-direction: row;
+    
+    .card-wrapper {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      height: 80px;
-      width: 60px;
-      border-radius: 6px;
-      border: 0;
-      background-color: #b3b3b3;
+      height: 100%;
 
-      & + button {
-        margin-left: 20px;
+      .card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 150px;
+        width: 100px;
+        border-radius: 6px;
+        background-color: #e5e5e5;
+        margin-right: 20px;
       }
-    }
 
-    .card-selected {
-      background-color: blue;
+      h5 {
+        margin-left: -20px;
+      }
     }
   }
 `;

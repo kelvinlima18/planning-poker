@@ -12,6 +12,7 @@ export const Routes: React.FC = () => {
         <Route path="/" exact component={Home} />
         <Route path="/room/:id" exact component={Room} />
         <Route path="/invite/:id" exact component={Invite} />
+        <Route path="/invite" exact component={Invite} />
       </Switch>
     </BrowserRouter>
   );

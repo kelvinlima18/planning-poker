@@ -17,7 +17,7 @@ export const Container = styled.div`
     background-color: #ffffff;
     border: 0;
     border-radius: 6px;
-    color: #35353A;
+    color: #222831;
   }
 `;
 
@@ -35,7 +35,7 @@ export const Options = styled.div<{ open: boolean }>`
     background-color: #ffffff;
     border: 0;
     padding: 5px;
-    color: #35353A;
+    color: #222831;
     transition: filter 0.4s;
     border-radius: 6px;
     display: flex;

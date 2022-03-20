@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.header`
   max-width: 100vw;
   height: 60px;
-  background-color: #695AD5;
+  background-color: #222831;
 
   section {
     max-width: 1152px;
@@ -53,17 +53,17 @@ export const Container = styled.header`
     }
 
     button {
-      background-color: #ffffff;
+      background-color: #00fff5;
       padding: 7px 26px;
       border: 0;
       border-radius: 6px;
-      color: #695AD5;
+      color: #222831;
       font-size: 12px;
       font-weight: 600;
-      transition: filter 0.4s;
+      transition: background-color 0.4s;
 
       &:hover {
-        filter: brightness(0.95);
+        background-color: #00adb5;
       }
     }
   }

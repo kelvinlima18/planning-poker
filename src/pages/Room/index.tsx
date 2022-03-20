@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { GiCardPlay } from 'react-icons/gi';
+import { ImClubs } from 'react-icons/im';
 import { useParams } from 'react-router';
 import { getRoom, getPlayers, updateUserCard, updateGameStatus, resetGame, updateShowCards } from '../../repository/firebase';
 import { RoomData, UserData } from '../../types/user';
@@ -32,6 +33,8 @@ export const Room: React.FC = () => {
     { card: '40', selected: false },
     { card: '100', selected: false },
   ]);
+
+  const userIndex = users.findIndex(user => user.id === loggedUser?.id);
    
   useEffect(() => {
     const loadRoomData = async () => {
@@ -121,15 +124,16 @@ export const Room: React.FC = () => {
         <section>
           <h1>planning.poker</h1>
 
-          <nav>
-            <a href="/#">Home</a>
-            <a href="/#">Entrar em uma sala</a>
-          </nav>
-
           <section>
             <div className="avatar" />
             <p>{loggedUser?.username}</p>
           </section>
+          <nav>
+
+            <a href="/#">Home</a>
+            <a href="/#">Entrar em uma sala</a>
+          </nav>
+
         </section>
       </PokerBar>
 
@@ -175,23 +179,45 @@ export const Room: React.FC = () => {
 
             <PokerTable>
               <aside>
-                {gameStarted && cards.map(item => (
-                  <button 
-                    type="button" 
-                    onClick={async () => await selectCard(item.card)}
-                    className={item.selected ? 'card-selected' : ''}
-                  >
-                    <div>
-                      {item.card}
-                    </div>
-                  </button>
-                ))}
+                <div>
+                  {cards.map(item => (
+                    <button
+                      disabled={!gameStarted}
+                      type="button" 
+                      onClick={async () => await selectCard(item.card)}
+                      className={item.selected ? 'card-selected' : ''}
+                    >
+                      {gameStarted ? item.card : <ImClubs size={18} color="#172B4D" />}
+                    </button>
+                  ))}
+                </div>
+
+                <p>
+                  {(gameStarted && !showCards) && 'Escolha a sua carta'}
+                  {!gameStarted && 'Aguardando o inicio da votação'}
+                </p>
               </aside>
+
                   
               <section>
-                {users.map(user => ((user.usertype !== 'host-spectator' && user.usertype !== 'spectator')) && (
+                {users
+                  .filter(() => {
+                    const userExist = users.find(user => user.id === loggedUser.id);
+
+                    const data: UserData[] = [];
+
+                    if (userExist) {
+                      data[0] = userExist;
+                      data.push(...users);
+                      
+                      return data;
+                    }
+
+                    console.log(data); 
+                  })
+                  .map(user => ((user.usertype !== 'host-spectator' && user.usertype !== 'spectator')) && (
                   <div className="card-wrapper">
-                    <div className="card">
+                    <div className={`card ${showCards && 'up-card'}`}>
                       {(showCards && user.card) && <div><h3>{user.card}</h3></div>}
                       {(!showCards && user.card) && <FaCheck size={28} />}
                       {(!showCards && !user.card) && <GiCardPlay size={28} />}

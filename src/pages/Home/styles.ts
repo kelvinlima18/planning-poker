@@ -35,12 +35,12 @@ export const Container = styled.main`
           height: 60px;
           width: 320px;
           margin-bottom: 15px;
-          border: 0;
+          border:0;
           font-size: 16px;
           font-weight: 500;
           border-radius: 6px;
           padding-left: 20px;
-          background-color: #e5e5e5;
+          background-color: #ffffff;
           color: #35353A;
 
           &::placeholder {

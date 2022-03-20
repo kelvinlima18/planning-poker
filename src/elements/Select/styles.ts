@@ -14,7 +14,7 @@ export const Container = styled.div`
     padding-left: 20px;
     font-size: 16px;
     font-weight: 500;
-    background-color: #e5e5e5;
+    background-color: #ffffff;
     border: 0;
     border-radius: 6px;
     color: #35353A;
@@ -27,12 +27,12 @@ export const Options = styled.div<{ open: boolean }>`
   z-index: 1;
   width: 100%;
   padding: 5px;
-  background-color: #e5e5e5;
+  background-color: #ffffff;
   border-radius: 6px;
 
   button {
     width: 100%;
-    background-color: #e5e5e5;
+    background-color: #ffffff;
     border: 0;
     padding: 5px;
     color: #35353A;

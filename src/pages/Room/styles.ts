@@ -9,7 +9,7 @@ export const PokerRoom = styled.main`
     display: flex;
     height: 100%;
     width: 100%;
-    background-color: #ffffff;
+    background-color: #172B4D;
     padding: 10px;
   
     > section {
@@ -17,7 +17,7 @@ export const PokerRoom = styled.main`
       flex-direction: column;
       width: 100%;
       height: 100%;
-      background-color: #e9e9e9;
+      background-color: #172B4D;
       border-radius: 10px;
     }
   }
@@ -27,7 +27,7 @@ export const PokerBar = styled.aside`
   display: flex;
   height: 100%;
   width: 256px;
-  background-color: #ffffff;
+  background-color: #172B4D;
 
   section {
     display: flex;
@@ -43,7 +43,7 @@ export const PokerBar = styled.aside`
       justify-content: center;
       letter-spacing: 1px;
       font-size: 18px;
-      color: #172B4D;
+      color: #FA8072;
       width: 100%;
       margin: 30px auto;
 
@@ -54,7 +54,7 @@ export const PokerBar = styled.aside`
         height: 5px;
         border-radius: 5px;
         margin-right: 4px;
-        background-color: #172B4D;
+        background-color: #FA8072;
         position: relative;
       }
     }
@@ -67,8 +67,7 @@ export const PokerBar = styled.aside`
       padding: 10px;
       border-radius: 10px;
       align-items: center;
-      background-color: #4b72ff;
-      margin-top: auto;
+      background-color: #FA8072;      
 
       .avatar {
         height: 100%;
@@ -80,8 +79,9 @@ export const PokerBar = styled.aside`
       p {
         margin-left: 20px;
         color: #ffffff;
-        font-weight: 500;
-        font-size: 15px;
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 0.6px;
       }
     }
 
@@ -97,16 +97,19 @@ export const PokerBar = styled.aside`
         padding: 0 20px;
         width: 100%;
         height: 40px;
-        font-size: 13px;
+        font-size: 12px;
+        letter-spacing: 0.6px;
         font-weight: 500;
         margin-bottom: 6px;
         text-decoration: none;
-        color: #172B4D;
-        background-color: #ffffff;
+        color: #ffffff;
+        background-color: #172B4D;
         border-radius: 6px;
+        transition: all 0.5s;
 
         &:hover {
-          background-color: #e5e5e5;
+          background-color: #FA8072;
+          color: #ffffff;
         }
       }
     }
@@ -118,7 +121,7 @@ export const PokerWrapper = styled.section`
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #172B4D;
   padding: 10px;
 `;
 
@@ -127,9 +130,10 @@ export const PokerActions = styled.header`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: #4b72ff;
+  background-color: #e5e5e5;
   border-radius: 10px 10px 0 0;
   padding: 20px;
+  border-bottom: 1px solid #dddddd;
 
   .host-actions {
     display: flex;
@@ -142,11 +146,12 @@ export const PokerActions = styled.header`
       font-weight: 500;
       border-radius: 6px;
       background-color: #ffffff;
-      color: #35353A;
-      transition: filter 0.4s;
+      color: #172B4D;
+      transition: all 0.4s;
 
       &:hover {
-        filter: brightness(0.9);
+        background-color: #172B4D;
+        color: #ffffff;
       }
 
       & + button {
@@ -158,9 +163,10 @@ export const PokerActions = styled.header`
   h1 {
     display: flex;
     font-size: 20px;
-    color: #ffffff;
+    color: #172B4D;
     font-weight: 500;
     justify-content: right;
+    margin-right: 60px;
     width: 100%;
   }
 
@@ -171,14 +177,20 @@ export const PokerActions = styled.header`
     width: 100%;
 
     button {
-      margin-left: 30px;
+      margin-left: 20px;
       height: 30px;
       width: 100px;
       font-size: 12px;
       border-radius: 6px;
       border: 0;
-      background-color: #FEC339;
+      background-color: #FA8072;
+      color: #ffffff;
       font-weight: 500;
+      transition: filter 0.4s;
+
+      &:hover {
+        filter: brightness(0.9);
+      }
     }
   
     input {
@@ -204,48 +216,60 @@ export const PokerTable = styled.section`
   border-radius: 0 0 10px 10px;
 
   aside {
+    display: flex;
+    flex-direction: column;
     background-color: #ffffff;
-    display: grid;
-    grid-template-columns: 55px 55px 55px;
-    gap: 18px;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 12%);
     height: fit-content;
-
-    button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 75px;
-      border: 2px solid #e5e5e5;
-      border-radius: 6px;
-      background-color: #ffffff;
-      color: #172B4D;
-      font-size: 16px;
-      font-weight: 500;
-      padding: 8px 6px;
-
-      div {
-        width: 100%;
-        border-radius: 4px;
-        height: 100%;
+    
+    div {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 50px 50px 50px;
+      
+    
+      button {
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        height: 65px;
+        border: 0;
+        border-radius: 6px;
         background-color: #e5e5e5;
-      }
+        color: #172B4D;
+        font-size: 18px;
+        font-weight: 500;
+        padding: 8px 6px;
 
-      &.card-selected {
-        border-color: #172B4D;
-        color: #ffffff;
-        font-weight: 600;
+        &:disabled {
+          background-color: #e5e5e5;
+          cursor: default;
+        }
 
-        div {
-          background-color: #172B4D;
+        &.card-selected {
+          border-color: #FA8072;
+          background-color: #FA8072;
+          color: #ffffff;
+          font-weight: 600;
+
+          div {
+            background-color: #FA8072;
+          }
         }
       }
+    }
+
+    p {
+      display: flex;
+      margin: 20px auto 0;
+      font-size: 12px;
+      font-weight: 500;
+      color: #172B4D;
+      word-break: break-all;
+      text-align: center;
     }
   }
 
@@ -275,15 +299,28 @@ export const PokerTable = styled.section`
         div {
           width: 100%;
           height: 100%;
-          background-color: #e5e5e5;
+          background-color: #ffffff;
           border-radius: 6px;
           display: flex;
           align-items: center;
           justify-content: center;
 
           h3 {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 500;
+            color: #172B4D;
+          }
+        }
+
+        &.up-card {
+          background-color: #FA8072;
+
+          div {
+            background-color: #FA8072;
+
+            h3 {
+              color: #ffffff;
+            }
           }
         }
       }

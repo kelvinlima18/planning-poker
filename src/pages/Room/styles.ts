@@ -9,7 +9,7 @@ export const PokerRoom = styled.main`
     display: flex;
     height: 100%;
     width: 100%;
-    background-color: #172B4D;
+    background-color: #222831;
     padding: 10px;
   
     > section {
@@ -17,7 +17,7 @@ export const PokerRoom = styled.main`
       flex-direction: column;
       width: 100%;
       height: 100%;
-      background-color: #172B4D;
+      background-color: #222831;
       border-radius: 10px;
     }
   }
@@ -27,7 +27,7 @@ export const PokerBar = styled.aside`
   display: flex;
   height: 100%;
   width: 256px;
-  background-color: #172B4D;
+  background-color: #222831;
 
   section {
     display: flex;
@@ -43,7 +43,7 @@ export const PokerBar = styled.aside`
       justify-content: center;
       letter-spacing: 1px;
       font-size: 18px;
-      color: #FA8072;
+      color: #e5e5e5;
       width: 100%;
       margin: 30px auto;
 
@@ -54,7 +54,7 @@ export const PokerBar = styled.aside`
         height: 5px;
         border-radius: 5px;
         margin-right: 4px;
-        background-color: #FA8072;
+        background-color: #e5e5e5;
         position: relative;
       }
     }
@@ -63,22 +63,22 @@ export const PokerBar = styled.aside`
       display: flex;
       flex-direction: row;
       width: 100%;
-      height: 60px;
+      height: 50px;
       padding: 10px;
       border-radius: 10px;
       align-items: center;
-      background-color: #FA8072;      
+      background-color: #00fff5;      
 
       .avatar {
         height: 100%;
-        width: 40px;
+        width: 30px;
         border-radius: 6px;
-        background-color: #e5e5e5;
+        background-color: #393e46;
       }
 
       p {
         margin-left: 20px;
-        color: #ffffff;
+        color: #222831;
         font-weight: 600;
         font-size: 14px;
         letter-spacing: 0.6px;
@@ -102,14 +102,14 @@ export const PokerBar = styled.aside`
         font-weight: 500;
         margin-bottom: 6px;
         text-decoration: none;
-        color: #ffffff;
-        background-color: #172B4D;
+        color: #e5e5e5;
+        background-color: #393e46;
         border-radius: 6px;
         transition: all 0.5s;
 
         &:hover {
-          background-color: #FA8072;
-          color: #ffffff;
+          background-color: #00fff5;
+          color: #393e46;
         }
       }
     }
@@ -121,7 +121,7 @@ export const PokerWrapper = styled.section`
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background-color: #172B4D;
+  background-color: #222831;
   padding: 10px;
 `;
 
@@ -146,11 +146,11 @@ export const PokerActions = styled.header`
       font-weight: 500;
       border-radius: 6px;
       background-color: #ffffff;
-      color: #172B4D;
+      color: #222831;
       transition: all 0.4s;
 
       &:hover {
-        background-color: #172B4D;
+        background-color: #222831;
         color: #ffffff;
       }
 
@@ -163,7 +163,7 @@ export const PokerActions = styled.header`
   h1 {
     display: flex;
     font-size: 20px;
-    color: #172B4D;
+    color: #222831;
     font-weight: 500;
     justify-content: right;
     margin-right: 60px;
@@ -183,13 +183,13 @@ export const PokerActions = styled.header`
       font-size: 12px;
       border-radius: 6px;
       border: 0;
-      background-color: #FA8072;
-      color: #ffffff;
+      background-color: #00fff5;
+      color: #222831;
       font-weight: 500;
-      transition: filter 0.4s;
+      transition: background-color 0.5s;
 
       &:hover {
-        filter: brightness(0.9);
+        background-color: #00adb5;
       }
     }
   
@@ -223,12 +223,12 @@ export const PokerTable = styled.section`
     padding: 20px;
     box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 12%);
     height: fit-content;
-    
+    width: min-content;
+
     div {
       display: grid;
       gap: 18px;
       grid-template-columns: 50px 50px 50px;
-      
     
       button {
         display: flex;
@@ -239,10 +239,16 @@ export const PokerTable = styled.section`
         border: 0;
         border-radius: 6px;
         background-color: #e5e5e5;
-        color: #172B4D;
+        color: #222831;
         font-size: 18px;
         font-weight: 500;
         padding: 8px 6px;
+        transition: background-color 0.5s;
+
+        &:hover {
+          background-color: #00fff5;
+          color: #222831;
+        }
 
         &:disabled {
           background-color: #e5e5e5;
@@ -250,13 +256,12 @@ export const PokerTable = styled.section`
         }
 
         &.card-selected {
-          border-color: #FA8072;
-          background-color: #FA8072;
-          color: #ffffff;
+          background-color: #00fff5;
+          color: #222831;
           font-weight: 600;
 
           div {
-            background-color: #FA8072;
+            background-color: #00fff5;
           }
         }
       }
@@ -264,11 +269,13 @@ export const PokerTable = styled.section`
 
     p {
       display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
       margin: 20px auto 0;
       font-size: 12px;
       font-weight: 500;
-      color: #172B4D;
-      word-break: break-all;
+      color: #222831;
       text-align: center;
     }
   }
@@ -291,7 +298,7 @@ export const PokerTable = styled.section`
         width: 80px;
         border-radius: 6px;
         background-color: #ffffff;
-        color: #172B4D;
+        color: #222831;
         margin-right: 20px;
         box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 12%);
         padding: 8px;
@@ -313,13 +320,13 @@ export const PokerTable = styled.section`
         }
 
         &.up-card {
-          background-color: #FA8072;
+          background-color: #00fff5;
 
           div {
-            background-color: #FA8072;
+            background-color: #00fff5;
 
             h3 {
-              color: #ffffff;
+              color: #222831;
             }
           }
         }

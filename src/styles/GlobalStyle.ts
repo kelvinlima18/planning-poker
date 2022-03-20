@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   :root {
-    --background: #ffffff;
+    --background: #e9e9e9;
   }
 
   body {

@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
 export const Container = styled.main`
-  max-width: 1152px;
   height: calc(100vh - 60px);
   display: flex;
+  flex-direction: column;
   margin: 0 auto;
 
-  section {
+  > section {
+    max-width: 1152px;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
@@ -80,7 +81,7 @@ export const Container = styled.main`
         transition: background-color 0.4s;
 
         &:hover {
-          background-color: #AEA7E8;
+          background-color: #604BC5;
         }
       }
     }

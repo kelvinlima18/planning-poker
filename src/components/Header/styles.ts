@@ -12,7 +12,6 @@ export const Container = styled.header`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
 
     h1 {
       display: flex;
@@ -36,10 +35,9 @@ export const Container = styled.header`
     nav {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
       height: 100%;
       width: 20%;
-      margin-bottom: 30px;
 
       a {
         color: #ffffff;

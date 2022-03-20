@@ -14,10 +14,10 @@ export const Container = styled.div`
     padding-left: 20px;
     font-size: 16px;
     font-weight: 500;
-    background-color: #ffffff;
+    background-color: #e5e5e5;
     border: 0;
     border-radius: 6px;
-    color: #646464;
+    color: #35353A;
   }
 `;
 
@@ -27,15 +27,15 @@ export const Options = styled.div<{ open: boolean }>`
   z-index: 1;
   width: 100%;
   padding: 5px;
-  background-color: #ffffff;
+  background-color: #e5e5e5;
   border-radius: 6px;
 
   button {
     width: 100%;
-    background-color: #ffffff;
+    background-color: #e5e5e5;
     border: 0;
     padding: 5px;
-    color: #646464;
+    color: #35353A;
     transition: filter 0.4s;
     border-radius: 6px;
     display: flex;

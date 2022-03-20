@@ -2,8 +2,10 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid } from 'uuid';
 import Select from '../../elements/Select';
+import { Header } from '../../components/Header';
 
 import { createRoom, addPlayerToRoom } from '../../repository/firebase';
+import { RoomData, UserData } from '../../types/user';
 
 import { Container } from './styles';
 
@@ -17,25 +19,34 @@ export const Home: React.FC = () => {
   const handleAddUser = async (event: FormEvent) => {
     event.preventDefault();
 
-    const roomData = {
+    const roomData: RoomData = {
       id: uuid(),
       roomname,
-      gameStarted: false
+      gameStarted: false,
+      showCards: false
     };
 
-    const userData = {
+    
+    const userDataOnSpectator: UserData = {
       id: uuid(),
       username,
-      usertype: 'host',
+      usertype: onSpectator ? 'host-spectator' :  'host-player',
     };
-
+    
+    const userData: UserData = {
+      ...userDataOnSpectator,
+      card: ""
+    }
+    
     await createRoom(roomData);
-    await addPlayerToRoom(roomData.id, userData);
+    await addPlayerToRoom(roomData.id, onSpectator ? userDataOnSpectator : userData);
     history.push(`/room/${roomData.id}`);
   }
 
   return (
     <Container>
+      <Header />
+
       <section>
         <h2>Crie aqui a sua sala</h2>
 

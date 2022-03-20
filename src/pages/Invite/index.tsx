@@ -2,28 +2,34 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { v4 as uuid } from 'uuid';
 import { addPlayerToRoom } from '../../repository/firebase';
+import { UserData } from '../../types/user';
 
 import { Container } from './styles';
 
 export const Invite: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [username, setUsername] = useState('');
-  const [usertype, setUsertype] = useState('player');
+  const [onSpectator, setOnSpectator] = useState(false);
 
   const history = useHistory();
 
   const joinRoom = async (event: FormEvent) => {
     event.preventDefault();
 
-    const player = {
+    const userDataOnSpectator: UserData = {
       id: uuid(),
       username,
-      usertype,
+      usertype: onSpectator ? 'spectator' : 'player',
     };
+
+    const userData: UserData = {
+      ...userDataOnSpectator,
+      card: ""
+    }
 
     if (!id) return;
 
-    await addPlayerToRoom(id, player);
+    await addPlayerToRoom(id, onSpectator ? userDataOnSpectator : userData);
     history.push(`/room/${id}`);
   }
 
@@ -38,13 +44,18 @@ export const Invite: React.FC = () => {
           onChange={(event: ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)}
           value={username}
         />
-        <select
-          onChange={(event: ChangeEvent<HTMLSelectElement>) => setUsertype(event.target.value)}
-          value={usertype}
-        >
-          <option value="guest">Convidado</option>
-          <option value="player">Participante</option>
-        </select>
+        
+        <div>
+          <input 
+            type="checkbox"
+            checked={onSpectator}
+            onChange={() => setOnSpectator(old => !old)} 
+            id="select-spectator" 
+          />
+          <label htmlFor="select-spectator">
+            Entrar como espectador
+          </label>
+        </div>
 
         <button type="submit">Entrar na sala</button>
       </form>

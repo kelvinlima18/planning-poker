@@ -1,7 +1,7 @@
 export interface UserData {
   id: string;
   username: string;
-  usertype: string;
+  usertype: 'host-player' | 'host-spectator' | 'player' | 'spectator';
   card?: string;
 }
 

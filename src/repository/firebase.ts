@@ -53,14 +53,14 @@ export const resetGame = async (roomId: string) => {
     querySnapshot.forEach(async userDoc => {
       return await db.runTransaction(async transaction => {
         return await transaction.get(userDoc.ref).then(doc => {
-          if (!doc.exists) { throw 'Document does not exists!' }
+          if (!doc.exists) { throw new Error('Document does not exists!') }
     
           const resetGame = doc.data()!.card = '';
           transaction.update(userDoc.ref, { card: resetGame });
         });
       })
-      .then(() => console.log('Deu tudo certo'))
-      .catch(err => console.log('Rapaz, alguma coisa deu errado: ', err))
+      .then(() => console.log('Deu certo'))
+      .catch(err => new Error('Its not possible reset cards value'));
     })
   })
 }

@@ -180,21 +180,21 @@ export const Room: React.FC = () => {
             <PokerTable>
               <aside>
                 <div>
-                  {cards.map(item => (
+                  {!showCards && cards.map(item => (
                     <button
                       disabled={!gameStarted}
                       type="button" 
                       onClick={async () => await selectCard(item.card)}
                       className={item.selected ? 'card-selected' : ''}
                     >
-                      {gameStarted ? item.card : <ImClubs size={18} color="#172B4D" />}
+                      {gameStarted ? item.card : <ImClubs size={18} color="#222831" />}
                     </button>
                   ))}
                 </div>
 
                 <p>
                   {(gameStarted && !showCards) && 'Escolha a sua carta'}
-                  {!gameStarted && 'Aguardando o inicio da votação'}
+                  {!gameStarted && 'Aguardando organizador iniciar a votação'}
                 </p>
               </aside>
 

@@ -33,8 +33,6 @@ export const Room: React.FC = () => {
     { card: '40', selected: false },
     { card: '100', selected: false },
   ]);
-
-  const userIndex = users.findIndex(user => user.id === loggedUser?.id);
    
   useEffect(() => {
     const loadRoomData = async () => {
@@ -83,6 +81,29 @@ export const Room: React.FC = () => {
     }
   }, [showCards]);
 
+  useEffect(() => {
+    const loadPokerData = () => {
+     const data: any = {};
+
+     const userCanVote = users.map(user => user.usertype === 'host-player' || user.usertype === 'player').length;
+     
+     users.forEach(user => {
+       console.log('01');
+      if (user.card || user.card === '' || user.card === '?') {
+       console.log('02');
+      } else {
+       console.log('03');
+        const half = user.card === '½' ? 0.5 : undefined;
+        if (half) data['media'] += half 
+        if (!half) data['media'] += parseInt(user.card!); 
+        console.log(data);
+      }
+     });
+    }
+
+    loadPokerData();
+  }, [users]);
+
   const selectCard = async (card: string) => {
     setCards(prev => prev.map(c => {
         if (c.card === card) {
@@ -126,7 +147,14 @@ export const Room: React.FC = () => {
 
           <section>
             <div className="avatar" />
-            <p>{loggedUser?.username}</p>
+            <div className="userdata-wrapper">
+              <p>{loggedUser?.username}</p>
+              {(loggedUser?.usertype === 'host-spectator' || loggedUser?.usertype === 'spectator')&& (
+                <span>
+                  Espectador
+                </span>
+              )}
+            </div>
           </section>
           <nav>
 
@@ -180,16 +208,20 @@ export const Room: React.FC = () => {
             <PokerTable>
               <aside>
                 <div>
-                  {!showCards && cards.map(item => (
+                  {!showCards ? cards.map(item => (
                     <button
-                      disabled={!gameStarted}
+                      disabled={!gameStarted || loggedUser.usertype === 'spectator'}
                       type="button" 
                       onClick={async () => await selectCard(item.card)}
                       className={item.selected ? 'card-selected' : ''}
                     >
                       {gameStarted ? item.card : <ImClubs size={18} color="#222831" />}
                     </button>
-                  ))}
+                  )) : (
+                    <>
+                      <h3>Medias</h3>
+                    </>
+                  )}
                 </div>
 
                 <p>

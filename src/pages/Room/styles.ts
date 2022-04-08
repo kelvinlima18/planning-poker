@@ -76,13 +76,31 @@ export const PokerBar = styled.aside`
         background-color: #393e46;
       }
 
-      p {
+      .userdata-wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
         margin-left: 20px;
-        color: #222831;
-        font-weight: 600;
-        font-size: 14px;
-        letter-spacing: 0.6px;
+        
+        p {
+          color: #222831;
+          font-weight: 600;
+          font-size: 14px;
+          letter-spacing: 0.6px;
+        }
+        
+        span {
+          display: flex;
+          align-items: center;
+          font-size:8px;
+          background-color: #00adb5;
+          width: fit-content;
+          padding: 1px 4px;
+          color: #ffffff;
+          border-radius: 4px;
+        }
       }
+
     }
 
     nav {

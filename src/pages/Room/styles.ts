@@ -70,8 +70,8 @@ export const PokerBar = styled.aside`
       background-color: #00fff5;      
 
       .avatar {
-        height: 100%;
-        width: 30px;
+        height: 30px;
+        width: 40px;
         border-radius: 6px;
         background-color: #393e46;
       }
@@ -241,9 +241,9 @@ export const PokerTable = styled.section`
     padding: 20px;
     box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 12%);
     height: fit-content;
-    width: min-content;
+    min-width: 226px;
 
-    div {
+    .cards-list {
       display: grid;
       gap: 18px;
       grid-template-columns: 50px 50px 50px;
@@ -284,6 +284,72 @@ export const PokerTable = styled.section`
         }
       }
     }
+    
+    > section {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+
+      .chosen-card {
+        display: flex;
+        margin-top: 10px;
+
+        .card {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 50px;
+          height: 65px;
+          border-radius: 6px;
+          background-color: #e5e5e5;
+          color: #222831;
+          font-size: 18px;
+          font-weight: 500;
+          padding: 8px 6px;
+        }
+
+        & + div {
+          margin-top: 20px;
+        }
+
+        .amount {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          font-weight: 500;
+          width: 100%;
+          background-color: #f9f9f9;
+          border-radius: 6px;
+          margin-left: 10px;
+        }
+      }
+
+      .average {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: #222831;
+        margin-bottom: 20px;
+        border-radius: 6px;
+        padding: 20px 0;
+
+        h3 {
+          font-size: 24px;
+          letter-spacing: 1.5px;
+          font-weight: 500;
+          color: #f9f9f9;
+        }
+
+        span {
+          font-size: 10px;
+          font-weight: 300;
+          color: #b3b3b3;
+        }
+      }
+    }
 
     p {
       display: flex;
@@ -300,14 +366,17 @@ export const PokerTable = styled.section`
 
   section {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     margin-left: 20px;
+    row-gap: 20px;
+    height: fit-content;
     
     .card-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-
+      
       .card {
         display: flex;
         align-items: center;
@@ -347,6 +416,10 @@ export const PokerTable = styled.section`
               color: #222831;
             }
           }
+        }
+
+        &.spectator-card {
+          background-color: #f9f9f9;
         }
       }
 

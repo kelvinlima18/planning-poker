@@ -48,6 +48,7 @@ export const updateUserCard = async (roomId: string, userId: string, card: strin
 
 export const resetGame = async (roomId: string) => {
   const usersDoc =  db.collection('rooms').doc(roomId).collection('users').get();
+  console.log({usersDoc});
 
   return await usersDoc.then(querySnapshot => {
     querySnapshot.forEach(async userDoc => {
@@ -59,8 +60,7 @@ export const resetGame = async (roomId: string) => {
           transaction.update(userDoc.ref, { card: resetGame });
         });
       })
-      .then(() => console.log('Deu certo'))
-      .catch(err => new Error('Its not possible reset cards value'));
+      .catch(() => new Error('Its not possible reset cards value'));
     })
   })
 }

@@ -7,7 +7,7 @@ export const Header: React.FC = () => {
   return (
     <Container>
       <section>
-        <h1>planning poker</h1>
+        <h1>planning.poker</h1>
 
         <nav>
           <a href="/">Home</a>

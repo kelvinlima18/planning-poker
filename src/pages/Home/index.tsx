@@ -5,14 +5,14 @@ import Select from '../../elements/Select';
 import { Header } from '../../components/Header';
 
 import { createRoom, addPlayerToRoom } from '../../repository/firebase';
-import { RoomData, UserData } from '../../types/user';
+import { RoomData, UserData, UserType } from '../../types/user';
 
 import { Container } from './styles';
 
 export const Home: React.FC = () => {
   const [roomname, setRoomname] = useState('');
   const [username, setUsername] = useState('');
-  const [onSpectator, setOnSpectator] = useState(false);
+  const [isSpectator, setIsSpectator] = useState(false);
 
   const history = useHistory();
 
@@ -30,7 +30,8 @@ export const Home: React.FC = () => {
     const userDataOnSpectator: UserData = {
       id: uuid(),
       username,
-      usertype: onSpectator ? 'host-spectator' :  'host-player',
+      usertype: 'HOST',
+      isSpectator,
     };
     
     const userData: UserData = {
@@ -39,7 +40,7 @@ export const Home: React.FC = () => {
     }
     
     await createRoom(roomData);
-    await addPlayerToRoom(roomData.id, onSpectator ? userDataOnSpectator : userData);
+    await addPlayerToRoom(roomData.id, isSpectator ? userDataOnSpectator : userData);
     history.push(`/room/${roomData.id}`);
   }
 
@@ -73,8 +74,8 @@ export const Home: React.FC = () => {
             <div className="spectator-wrapper">
               <input 
                 type="checkbox" 
-                checked={onSpectator}
-                onChange={() => setOnSpectator(old => !old)} 
+                checked={isSpectator}
+                onChange={() => setIsSpectator(old => !old)} 
                 name="spectator" 
                 id="spectator" 
               />

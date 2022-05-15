@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { FaCheck, FaTimes } from 'react-icons/fa';
+import { FaCheck, FaTimes, FaEye } from 'react-icons/fa';
 import { GiCardPlay } from 'react-icons/gi';
 import { ImClubs } from 'react-icons/im';
 import { useParams } from 'react-router';
 import { getRoom, getPlayers, updateUserCard, updateGameStatus, resetGame, updateShowCards } from '../../repository/firebase';
-import { RoomData, UserData } from '../../types/user';
+import { MatchDataInterface, RoomData, UserData } from '../../types/user';
 
 import { PokerRoom, PokerWrapper, PokerActions, PokerTable, PokerBar  } from './styles';
 
@@ -17,6 +17,8 @@ export const Room: React.FC = () => {
 
   const [users, setUsers] = useState<UserData[]>([]);
   const [room, setRoom] = useState<RoomData>({} as RoomData);
+
+  const [matchData, setMatchData] = useState<MatchDataInterface>({} as MatchDataInterface);
 
   const { id: roomId, gameStarted, showCards } = room;
   
@@ -83,22 +85,39 @@ export const Room: React.FC = () => {
 
   useEffect(() => {
     const loadPokerData = () => {
-     const data: any = {};
+      const data: any[] = [];
+      let count: number = 0;
 
-     const userCanVote = users.map(user => user.usertype === 'host-player' || user.usertype === 'player').length;
-     
-     users.forEach(user => {
-       console.log('01');
-      if (user.card || user.card === '' || user.card === '?') {
-       console.log('02');
-      } else {
-       console.log('03');
-        const half = user.card === '½' ? 0.5 : undefined;
-        if (half) data['media'] += half 
-        if (!half) data['media'] += parseInt(user.card!); 
-        console.log(data);
-      }
-     });
+      users.forEach(user => {
+        if (user.card) {
+          if (user.card === '') data.push({ card: 'no-vote', user: user.username, valueCard: 0 });
+          if (user.card === '?') data.push({ card: '?', user: user.username, valueCard: 0 });
+          if (user.card !== '' && user.card !== '?') {
+            if (user.card === '½') {
+              data.push({ card: '½', user: user.username, valueCard: 0.5 });
+              count = count += 0.5;
+            } else {
+              data.push({ card: user.card, user: user.username, valueCard: Number(user.card) });
+              count = count += Number(user.card);
+            }
+          }
+        }
+      });
+
+      const chosenData: any[] = [];
+      data.forEach(user => {
+        chosenData[user.card] = {
+          card: user.card,
+          amount: !chosenData[user.card] ? 1 : chosenData[user.card].amount += 1
+        };
+      })
+
+      const average = count/data.filter(user => user.card !== '?' && user.card !== '').length;
+
+      setMatchData({
+        media: average || 0,
+        chosenCards: Object.values(chosenData) as unknown as any
+      })
     }
 
     loadPokerData();
@@ -149,7 +168,7 @@ export const Room: React.FC = () => {
             <div className="avatar" />
             <div className="userdata-wrapper">
               <p>{loggedUser?.username}</p>
-              {(loggedUser?.usertype === 'host-spectator' || loggedUser?.usertype === 'spectator')&& (
+              {(loggedUser?.isSpectator) && (
                 <span>
                   Espectador
                 </span>
@@ -158,8 +177,8 @@ export const Room: React.FC = () => {
           </section>
           <nav>
 
-            <a href="/#">Home</a>
-            <a href="/#">Entrar em uma sala</a>
+            <a href="/">Home</a>
+            <a href="/invite">Entrar em uma sala</a>
           </nav>
 
         </section>
@@ -171,7 +190,7 @@ export const Room: React.FC = () => {
         ) : (
           <>
             <PokerActions>
-              {(loggedUser?.usertype === 'host-spectator' || loggedUser?.usertype === 'host-player') && (
+              {(loggedUser?.usertype === 'HOST') && (
                 <section className="host-actions">
                   <button 
                   type="button"
@@ -207,23 +226,46 @@ export const Room: React.FC = () => {
 
             <PokerTable>
               <aside>
-                <div>
-                  {!showCards ? cards.map(item => (
-                    <button
-                      disabled={!gameStarted || loggedUser.usertype === 'spectator'}
-                      type="button" 
-                      onClick={async () => await selectCard(item.card)}
-                      className={item.selected ? 'card-selected' : ''}
-                    >
-                      {gameStarted ? item.card : <ImClubs size={18} color="#222831" />}
-                    </button>
-                  )) : (
-                    <>
-                      <h3>Medias</h3>
-                    </>
-                  )}
-                </div>
+                {!showCards ? (
+                  <div className="cards-list">
+                    {cards.map(item => (
+                      <button
+                        disabled={!gameStarted || loggedUser.isSpectator}
+                        type="button" 
+                        onClick={async () => await selectCard(item.card)}
+                        className={item.selected ? 'card-selected' : ''}
+                      >
+                        {(gameStarted && !loggedUser.isSpectator) ? item.card : <ImClubs size={18} color="#222831" />}
+                      </button>
 
+                  ))}
+                </div>
+                ) : (
+                  <section>
+                    <div className="average">
+                      <h3>{matchData.media}</h3>
+                      <span>Média final</span>
+                    </div>
+
+                    <h3>Resultados</h3>
+
+                    <div>
+                      {matchData.chosenCards.map(item => (
+                        <div className="chosen-card">
+                          <div className="card">
+                            {item.card}
+                          </div>
+                          <div className="amount">
+                            {item.amount > 1 
+                              ? `${item.amount} votos`
+                              : '1 voto' 
+                            }
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
                 <p>
                   {(gameStarted && !showCards) && 'Escolha a sua carta'}
                   {!gameStarted && 'Aguardando organizador iniciar a votação'}
@@ -245,15 +287,19 @@ export const Room: React.FC = () => {
                       return data;
                     }
 
-                    console.log(data); 
+                    return data;
                   })
-                  .map(user => ((user.usertype !== 'host-spectator' && user.usertype !== 'spectator')) && (
+                  .map(user => (
                   <div className="card-wrapper">
-                    <div className={`card ${showCards && 'up-card'}`}>
-                      {(showCards && user.card) && <div><h3>{user.card}</h3></div>}
-                      {(!showCards && user.card) && <FaCheck size={28} />}
-                      {(!showCards && !user.card) && <GiCardPlay size={28} />}
-                      {(showCards && !user.card) && <FaTimes size={28} />}
+                    <div className={`card ${showCards && 'up-card'} ${user.isSpectator ? 'spectator-card' : ''}`}>
+                      {user.isSpectator ? <FaEye size={28} /> : (
+                        <>
+                        {(showCards && user.card) && <div><h3>{user.card}</h3></div>}
+                        {(!showCards && user.card) && <FaCheck size={28} />}
+                        {(!showCards && !user.card) && <GiCardPlay size={28} />}
+                        {(showCards && !user.card) && <FaTimes size={28} />}                        
+                        </>
+                      )}
                     </div>
                     <h5>{user.username}</h5>
                   </div>

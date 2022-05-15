@@ -10,7 +10,7 @@ import { Container } from './styles';
 export const Invite: React.FC = () => {
   const { id: idParams } = useParams<{ id: string }>();
   const [username, setUsername] = useState('');
-  const [onSpectator, setOnSpectator] = useState(false);
+  const [isSpectator, setIsSpectator] = useState(false);
   const [id, setId] = useState(idParams);
 
   const history = useHistory();
@@ -21,7 +21,8 @@ export const Invite: React.FC = () => {
     const userDataOnSpectator: UserData = {
       id: uuid(),
       username,
-      usertype: onSpectator ? 'spectator' : 'player',
+      usertype: 'PLAYER',
+      isSpectator
     };
 
     const userData: UserData = {
@@ -31,7 +32,7 @@ export const Invite: React.FC = () => {
 
     if (!id) return;
 
-    await addPlayerToRoom(id, onSpectator ? userDataOnSpectator : userData);
+    await addPlayerToRoom(id, isSpectator ? userDataOnSpectator : userData);
     history.push(`/room/${id}`);
   }
 
@@ -63,8 +64,8 @@ export const Invite: React.FC = () => {
           <div className="spectator-wrapper">
             <input 
               type="checkbox"
-              checked={onSpectator}
-              onChange={() => setOnSpectator(old => !old)} 
+              checked={isSpectator}
+              onChange={() => setIsSpectator(old => !old)} 
               id="select-spectator" 
             />
             <label htmlFor="select-spectator">

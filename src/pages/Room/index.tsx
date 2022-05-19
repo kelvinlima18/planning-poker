@@ -70,6 +70,7 @@ export const Room: React.FC = () => {
 
 
     selectCardOnDatabase();
+    // eslint-disable-next-line
 }, [users, cards]);
 
   useEffect(() => {

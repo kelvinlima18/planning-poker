@@ -5,7 +5,7 @@ import Select from '../../elements/Select';
 import { Header } from '../../components/Header';
 
 import { createRoom, addPlayerToRoom } from '../../repository/firebase';
-import { RoomData, UserData, UserType } from '../../types/user';
+import { RoomData, UserData } from '../../types/user';
 
 import { Container } from './styles';
 

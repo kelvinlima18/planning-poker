@@ -40,7 +40,7 @@ export const Invite: React.FC = () => {
           history.push(`/room/${id}`);
         }).catch(() => console.log('Oops, algo deu errado'));
       } else {
-        console.error('Não existe essa sala');
+        console.error('Pamonha');
       }
     })
 

@@ -71,7 +71,7 @@ export const PokerBar = styled.aside`
 
       .avatar {
         height: 30px;
-        width: 40px;
+        width: 39px;
         border-radius: 6px;
         background-color: #393e46;
       }
@@ -80,12 +80,12 @@ export const PokerBar = styled.aside`
         display: flex;
         flex-direction: column;
         width: 100%;
-        margin-left: 20px;
+        margin-left: 10px;
         
         p {
           color: #222831;
-          font-weight: 600;
-          font-size: 14px;
+          font-weight: 500;
+          font-size: 12px;
           letter-spacing: 0.6px;
         }
         
@@ -236,16 +236,18 @@ export const PokerTable = styled.section`
   aside {
     display: flex;
     flex-direction: column;
+    align-items: center;
     background-color: #ffffff;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 12%);
     height: fit-content;
-    min-width: 226px;
+    min-width: 300px;
 
     .cards-list {
       display: grid;
-      gap: 18px;
+      row-gap: 25px;
+      column-gap: 40px;
       grid-template-columns: 50px 50px 50px;
     
       button {
@@ -289,6 +291,7 @@ export const PokerTable = styled.section`
       display: flex;
       flex-direction: column;
       margin: 0;
+      width: 100%;
 
       .chosen-card {
         display: flex;
@@ -353,7 +356,7 @@ export const PokerTable = styled.section`
 
     p {
       display: flex;
-      width: 100%;
+      max-width: 90%;
       justify-content: center;
       align-items: center;
       margin: 20px auto 0;
@@ -428,6 +431,8 @@ export const PokerTable = styled.section`
         margin-top: 10px;
         font-weight: 400;
         font-size: 12px;
+        max-width: 100%;
+        text-align: center;
       }
     }
   }

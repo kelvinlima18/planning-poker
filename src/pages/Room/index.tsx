@@ -146,7 +146,7 @@ export const Room: React.FC = () => {
     const urlInvite = document.createElement('input');
     const container = document.getElementById('invite-wrapper');
 
-    const inputAlreadyExists = container!.getElementsByClassName('input-url');
+    const inputAlreadyExists = container!.getElementsByClassName('invite-link');
 
     if (inputAlreadyExists.length > 0) return;
 

@@ -44,7 +44,7 @@ export const Invite: React.FC = () => {
       }
     })
 
-    setTimeout(() => setLoadingButton(false), 5000);
+    setTimeout(() => setLoadingButton(false), 1000);
   }
 
   return (

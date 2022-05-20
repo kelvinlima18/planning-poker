@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { v4 as uuid } from 'uuid';
 import { Header } from '../../components/Header';
-import { addPlayerToRoom } from '../../repository/firebase';
+import { addPlayerToRoom, getRoom } from '../../repository/firebase';
 import { UserData } from '../../types/user';
 
 import { Container } from './styles';
@@ -12,11 +12,13 @@ export const Invite: React.FC = () => {
   const [username, setUsername] = useState('');
   const [isSpectator, setIsSpectator] = useState(false);
   const [id, setId] = useState(idParams);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const history = useHistory();
 
   const joinRoom = async (event: FormEvent) => {
     event.preventDefault();
+    setLoadingButton(true);
 
     const userDataOnSpectator: UserData = {
       id: uuid(),
@@ -32,8 +34,17 @@ export const Invite: React.FC = () => {
 
     if (!id) return;
 
-    await addPlayerToRoom(id, isSpectator ? userDataOnSpectator : userData);
-    history.push(`/room/${id}`);
+    (await getRoom(id)).onSnapshot(async (snapshot) => {
+      if (snapshot.exists) {
+        await addPlayerToRoom(id, isSpectator ? userDataOnSpectator : userData).then(() => {
+          history.push(`/room/${id}`);
+        }).catch(() => console.log('Oops, algo deu errado'));
+      } else {
+        console.error('Não existe essa sala');
+      }
+    })
+
+    setTimeout(() => setLoadingButton(false), 5000);
   }
 
   return (
@@ -73,7 +84,12 @@ export const Invite: React.FC = () => {
             </label>
           </div>
 
-          <button type="submit">Entrar na sala</button>
+          <button 
+            type="submit"
+            disabled={loadingButton}
+          >
+            Entrar na sala
+          </button>
         </form>
       </section>
     </Container>

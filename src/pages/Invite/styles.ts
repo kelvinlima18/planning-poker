@@ -78,6 +78,13 @@ export const Container = styled.div`
         &:hover {
           background-color: #00adb5;
         }
+
+        &:disabled {
+          background-color: buttonface;
+          color: #aaaaaa;
+          pointer-events: none;
+          user-select: none;
+        }
       }
     }
   }

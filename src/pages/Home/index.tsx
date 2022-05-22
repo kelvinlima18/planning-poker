@@ -1,6 +1,9 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useHistory } from 'react-router';
 import { v4 as uuid } from 'uuid';
+import * as Yup from 'yup';
+import toast from 'react-hot-toast';
+
 import Select from '../../elements/Select';
 import { Header } from '../../components/Header';
 
@@ -13,35 +16,52 @@ export const Home: React.FC = () => {
   const [roomname, setRoomname] = useState('');
   const [username, setUsername] = useState('');
   const [isSpectator, setIsSpectator] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const history = useHistory();
 
   const handleAddUser = async (event: FormEvent) => {
     event.preventDefault();
-
-    const roomData: RoomData = {
-      id: uuid(),
-      roomname,
-      gameStarted: false,
-      showCards: false
-    };
-
     
-    const userDataOnSpectator: UserData = {
-      id: uuid(),
-      username,
-      usertype: 'HOST',
-      isSpectator,
-    };
-    
-    const userData: UserData = {
-      ...userDataOnSpectator,
-      card: ""
+    try {
+      const schema = Yup.object().shape({
+        roomname: Yup.string().required('O nome da sala é obrigatório'),
+        username: Yup.string().required('O nome do usuário é obrigatório'),
+      });
+      
+      await schema.validate({ roomname, username }, { abortEarly: false });
+      
+      setLoadingButton(true);
+  
+      const roomData: RoomData = {
+        id: uuid(),
+        roomname,
+        gameStarted: false,
+        showCards: false
+      };
+  
+      
+      const userDataOnSpectator: UserData = {
+        id: uuid(),
+        username,
+        usertype: 'HOST',
+        isSpectator,
+      };
+      
+      const userData: UserData = {
+        ...userDataOnSpectator,
+        card: ""
+      }
+      
+      await createRoom(roomData);
+      await addPlayerToRoom(roomData.id, isSpectator ? userDataOnSpectator : userData);
+      history.push(`/room/${roomData.id}`);
+
+      setTimeout(() => setLoadingButton(false), 1000);
+    } catch (error: any) {
+      toast.error(error.errors[0]);
     }
-    
-    await createRoom(roomData);
-    await addPlayerToRoom(roomData.id, isSpectator ? userDataOnSpectator : userData);
-    history.push(`/room/${roomData.id}`);
+
   }
 
   return (
@@ -58,6 +78,7 @@ export const Home: React.FC = () => {
               onChange={(event: ChangeEvent<HTMLInputElement>) => setRoomname(event.target.value)}
               value={roomname}
               placeholder="Nome da sala"
+              maxLength={30}
             />
 
             <input
@@ -65,6 +86,7 @@ export const Home: React.FC = () => {
               placeholder="Nome do usuário"
               value={username}
               onChange={(event: ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)}
+              maxLength={16}
             />
 
           </div>
@@ -83,7 +105,12 @@ export const Home: React.FC = () => {
             </div>
           </div>
 
-          <button type="submit">Criar Sala</button>
+          <button 
+            type="submit" 
+            disabled={loadingButton}
+          >
+            Criar Sala
+          </button>
         </form>
       </section>
     </Container>

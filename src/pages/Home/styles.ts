@@ -39,7 +39,7 @@ export const Container = styled.main`
           font-size: 16px;
           font-weight: 500;
           border-radius: 6px;
-          padding-left: 20px;
+          padding: 0 20px;
           background-color: #ffffff;
           color: #222831;
 
@@ -82,6 +82,13 @@ export const Container = styled.main`
 
         &:hover {
           background-color: #00adb5;
+        }
+
+        &:disabled {
+          background-color: buttonface;
+          color: #aaaaaa;
+          pointer-events: none;
+          user-select: none;
         }
       }
     }

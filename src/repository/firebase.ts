@@ -1,7 +1,7 @@
-import 'firebase/analytics';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import { UserData } from '../types/user';
+import { getAnalytics } from 'firebase/analytics';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, doc } from 'firebase/firestore';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyC_ScqUKNG_Oxg-8Ev7paFconbJDJ5EVOE",
@@ -13,54 +13,14 @@ const firebaseConfig = {
   measurementId: "G-1EZP1YDE7T"
 };
 
-const app = firebase.initializeApp(firebaseConfig);
-firebase.analytics(app);
-const db = firebase.firestore(app);
+const app = initializeApp(firebaseConfig);
+getAnalytics(app);
+export const db = getFirestore(app);
 
-export const createRoom = async (roomData: { id: string, roomname: string, gameStarted: boolean }) => {
-  await db.collection('rooms').doc(roomData.id).set(roomData);
+export const roomsCollectionRef = () => {
+  return collection(db, 'rooms');
 }
 
-export const getRoom = async (roomId: string) => {
-  return db.collection('rooms').doc(roomId);
-}
-
-export const addPlayerToRoom = async (roomId: string, userData: UserData) => {
-  sessionStorage.setItem('user-planning-poker', JSON.stringify(userData));
-   await db.collection('rooms').doc(roomId).collection('users').doc(userData.id).set(userData);
-}
- 
-export const getPlayers = async (roomId: string) => {
-  return db.collection('rooms').doc(roomId).collection('users');
-}
-
-export const updateGameStatus = async (roomId: string, gameStarted: boolean) => {
-  await db.collection('rooms').doc(roomId).update({ gameStarted });
-}
-
-export const updateShowCards = async (roomId: string, showCards: boolean) => {
-  await db.collection('rooms').doc(roomId).update({ showCards });
-}
-
-export const updateUserCard = async (roomId: string, userId: string, card: string) => {
-  await db.collection('rooms').doc(roomId).collection('users').doc(userId).update({ card });
-}
-
-export const resetGame = async (roomId: string) => {
-  const usersDoc =  db.collection('rooms').doc(roomId).collection('users').get();
-  console.log({usersDoc});
-
-  return await usersDoc.then(querySnapshot => {
-    querySnapshot.forEach(async userDoc => {
-      return await db.runTransaction(async transaction => {
-        return await transaction.get(userDoc.ref).then(doc => {
-          if (!doc.exists) { throw new Error('Document does not exists!') }
-    
-          const resetGame = doc.data()!.card = '';
-          transaction.update(userDoc.ref, { card: resetGame });
-        });
-      })
-      .catch(() => new Error('Its not possible reset cards value'));
-    })
-  })
+export const usersCollectionRef = (roomId: string) => {
+  return collection(db, `rooms/${roomId}/users`);
 }

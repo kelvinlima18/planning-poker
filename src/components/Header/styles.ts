@@ -19,6 +19,7 @@ export const Container = styled.header`
       color: #ffffff;
       letter-spacing: 1px;
       font-size: 18px;
+      user-select: none;
 
       &::before {
         content: "";

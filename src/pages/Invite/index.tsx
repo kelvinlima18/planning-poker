@@ -5,11 +5,12 @@ import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 
 import { Header } from '../../components/Header';
-import { addPlayerToRoom, getRoom } from '../../repository/firebase';
+import { db } from '../../repository/firebase';
 
-import { UserData } from '../../types/user';
+import { RoomData, UserData } from '../../types/user';
 
 import { Container } from './styles';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export const Invite: React.FC = () => {
   const { id: idParams } = useParams<{ id: string }>();
@@ -19,19 +20,23 @@ export const Invite: React.FC = () => {
   const [loadingButton, setLoadingButton] = useState(false);
 
   const history = useHistory();
-
+  
   const joinRoom = async (event: FormEvent) => {
     event.preventDefault();
     
     try {
-      
       const schema = Yup.object().shape({
         username: Yup.string().required('O nome do usuário é obrigatório')
       });
-
+      
       await schema.validate({ username }, { abortEarly: false });
       
       setLoadingButton(true);
+      
+      const roomResponse = await getDoc(doc(db, 'rooms', id));
+      if (!roomResponse.exists()) throw new Error('Oops, essa sala não existe');
+
+      const room = roomResponse.data() as RoomData;
       
       const userDataOnSpectator: UserData = {
         id: uuid(),
@@ -46,20 +51,23 @@ export const Invite: React.FC = () => {
       }
       
       if (!id) return;
-      
-      (await getRoom(id)).onSnapshot(async (snapshot) => {
-        if (snapshot.exists) {
-          await addPlayerToRoom(id, isSpectator ? userDataOnSpectator : userData).then(() => {
-            history.push(`/room/${id}`);
-          }).catch(() => console.log('Oops, algo deu errado'));
-        } else {
-          toast.error('Não existe essa sala');
-        }
-      })
-      
-      setTimeout(() => setLoadingButton(false), 1000);
+
+      await setDoc(doc(db, `rooms/${room.id}/users`, userData.id), userData);
+      sessionStorage.setItem('user-planning-poker', JSON.stringify(userData));
+
+      history.push(`/room/${room.id}`);
     } catch (error: any) {
-      toast.error(error.errors[0]);
+      if (error.errors) {
+        toast.error(error.errors[0]);
+      } else {
+        if (!id) {
+          toast.error('Oops, essa sala não existe');
+        } else {
+          toast.error(error.message);
+        }
+      }
+    } finally {
+      setTimeout(() => setLoadingButton(false), 1000);
     }
   }
 

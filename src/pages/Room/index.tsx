@@ -1,9 +1,13 @@
+import { doc, getDocs, query, runTransaction, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import { useCollectionData, useCollectionDataOnce } from 'react-firebase-hooks/firestore';
+import toast from 'react-hot-toast';
 import { FaCheck, FaTimes, FaEye } from 'react-icons/fa';
 import { GiCardPlay } from 'react-icons/gi';
 import { ImClubs } from 'react-icons/im';
 import { useParams } from 'react-router';
-import { getRoom, getPlayers, updateUserCard, updateGameStatus, resetGame, updateShowCards } from '../../repository/firebase';
+
+import { roomsCollectionRef, usersCollectionRef, db } from '../../repository/firebase';
 import { MatchDataInterface, RoomData, UserData } from '../../types/user';
 
 import { PokerRoom, PokerWrapper, PokerActions, PokerTable, PokerBar  } from './styles';
@@ -20,8 +24,6 @@ export const Room: React.FC = () => {
 
   const [matchData, setMatchData] = useState<MatchDataInterface>({} as MatchDataInterface);
 
-  const { id: roomId, gameStarted, showCards } = room;
-  
   const [cards, setCards] = useState([
     { card: '?', selected: false },
     { card: '½', selected: false },
@@ -35,36 +37,24 @@ export const Room: React.FC = () => {
     { card: '40', selected: false },
     { card: '100', selected: false },
   ]);
-   
+
+  const [roomResponse] = useCollectionData(query(roomsCollectionRef(), where("id", "==", id)));
+  const [usersResponse] = useCollectionData(query(usersCollectionRef(id), where("id", "!=", null)));
+  
   useEffect(() => {
-    const loadRoomData = async () => {
-      (await getRoom(id)).onSnapshot(snapshot => {
-        if (snapshot.exists) {
-          const data = snapshot.data();
+    if (roomResponse && roomResponse?.length > 0) {
+      setRoom({ ...roomResponse[0] }  as unknown as RoomData);
+    }
 
-          setRoom(data as RoomData);
-        }
-      });
-
-      (await getPlayers(id)).onSnapshot(snapshot => {
-        let players: UserData[] = [];
-        snapshot.forEach(user => {
-          players.push(user.data() as UserData);
-        });
-
-        setUsers(players);
-      });
-    };
-
-    loadRoomData();
-  }, [id]);
-
+    setUsers(usersResponse as unknown as UserData[]);
+  }, [roomResponse, usersResponse]);
+  
   useEffect(() => {
     const selectCardOnDatabase = async () => {
       const selectedCard = cards.find(card => card.selected);
 
-      if (selectedCard) {
-        await updateUserCard(roomId, loggedUser!.id, selectedCard.card);
+      if (selectedCard && loggedUser) {
+        await updateDoc(doc(db, `rooms/${room.id}/users`, loggedUser?.id), { card: selectedCard.card })
       }
     }
 
@@ -74,7 +64,7 @@ export const Room: React.FC = () => {
 }, [users, cards]);
 
   useEffect(() => {
-    if (!showCards) {
+    if (!room.showCards) {
       setCards(prev => prev.map(item => {
         return {
           ...item,
@@ -82,14 +72,16 @@ export const Room: React.FC = () => {
         }
       }))
     }
-  }, [showCards]);
+  }, [room.showCards]);
 
   useEffect(() => {
     const loadPokerData = () => {
       const data: any[] = [];
       let count: number = 0;
 
-      users.forEach(user => {
+      if (!users) return;
+
+      users.forEach((user: UserData) => {
         if (user.card) {
           if (user.card === '') data.push({ card: 'no-vote', user: user.username, valueCard: 0 });
           if (user.card === '?') data.push({ card: '?', user: user.username, valueCard: 0 });
@@ -116,13 +108,43 @@ export const Room: React.FC = () => {
       const average = count/data.filter(user => user.card !== '?' && user.card !== '').length;
 
       setMatchData({
-        media: average || 0,
+        media: Number(average.toFixed(2)) || 0,
         chosenCards: Object.values(chosenData) as unknown as any
       })
     }
 
     loadPokerData();
   }, [users]);
+
+  const updateGameStatus = async (gameStarted: boolean) => {
+    await updateDoc(doc(db, 'rooms', room.id), { gameStarted });
+  }
+
+  const updateShowCards = async (showCards: boolean) => {
+    await updateDoc(doc(db, 'rooms', room.id), { showCards });
+  }
+
+  const resetGame = async () => {
+    try {
+      const usersDocuments = getDocs(usersCollectionRef(room.id));
+
+      (await usersDocuments).forEach(user => {
+        runTransaction(db, async (transaction) => {  
+          const documents = await transaction.get(user.ref);
+          
+          if (!documents.exists()) {
+            throw new Error('Documento inexistente')
+          }
+  
+          const resertCard = documents.data().card = '';
+          transaction.update(user.ref, { card: resertCard })
+        })
+      })
+
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
 
   const selectCard = async (card: string) => {
     setCards(prev => prev.map(c => {
@@ -138,8 +160,8 @@ export const Room: React.FC = () => {
   }
 
   const resetVotes = async () => {
-    await resetGame(roomId);
-    await updateShowCards(roomId, false);
+    await resetGame();
+    await updateShowCards(false);
   }
 
   const inviteGuest = () => {
@@ -197,20 +219,20 @@ export const Room: React.FC = () => {
                   type="button"
                   className="start-voting"
                   onClick={async () => {
-                    if (!gameStarted && !showCards) {
-                      await updateGameStatus(roomId, true);
+                    if (!room.gameStarted && !room.showCards) {
+                      await updateGameStatus(true);
                     } else {
                       resetVotes();
                     }
                   }}
                   >
-                    {gameStarted ? 'Reiniciar Votação' : 'Iniciar Votação'}
+                    {room.gameStarted ? 'Reiniciar Votação' : 'Iniciar Votação'}
                   </button>
-                  {(users.some(item => item.card !== '') && !showCards && gameStarted) && (
+                  {(users && users.some((item: UserData) => item.card !== '') && !room.showCards && room.gameStarted) && (
                     <button 
                       type="button"
                       className="show-cards" 
-                      onClick={async () => await updateShowCards(roomId, true)}
+                      onClick={async () => await updateShowCards(true)}
                     >
                       Revelar votos
                     </button>
@@ -227,16 +249,16 @@ export const Room: React.FC = () => {
 
             <PokerTable>
               <aside>
-                {!showCards ? (
+                {!room.showCards ? (
                   <div className="cards-list">
                     {cards.map(item => (
                       <button
-                        disabled={!gameStarted || loggedUser.isSpectator}
+                        disabled={!room.gameStarted || loggedUser.isSpectator}
                         type="button" 
                         onClick={async () => await selectCard(item.card)}
                         className={item.selected ? 'card-selected' : ''}
                       >
-                        {(gameStarted && !loggedUser.isSpectator) ? item.card : <ImClubs size={18} color="#222831" />}
+                        {(room.gameStarted && !loggedUser.isSpectator) ? item.card : <ImClubs size={18} color="#222831" />}
                       </button>
 
                   ))}
@@ -268,16 +290,16 @@ export const Room: React.FC = () => {
                   </section>
                 )}
                 <p>
-                  {(gameStarted && !showCards) && 'Escolha a sua carta'}
-                  {!gameStarted && 'Aguardando organizador iniciar a votação'}
+                  {(room.gameStarted && !room.showCards) && 'Escolha a sua carta'}
+                  {!room.gameStarted && 'Aguardando organizador iniciar a votação'}
                 </p>
               </aside>
 
                   
               <section>
-                {users
+                {users && users
                   .filter(() => {
-                    const userExist = users.find(user => user.id === loggedUser.id);
+                    const userExist = users.find((user: UserData) => user.id === loggedUser.id);
 
                     const data: UserData[] = [];
 
@@ -290,15 +312,15 @@ export const Room: React.FC = () => {
 
                     return data;
                   })
-                  .map(user => (
+                  .map((user: UserData) => (
                   <div className="card-wrapper">
-                    <div className={`card ${showCards && 'up-card'} ${user.isSpectator ? 'spectator-card' : ''}`}>
+                    <div className={`card ${room.showCards && 'up-card'} ${user.isSpectator ? 'spectator-card' : ''}`}>
                       {user.isSpectator ? <FaEye size={28} /> : (
                         <>
-                        {(showCards && user.card) && <div><h3>{user.card}</h3></div>}
-                        {(!showCards && user.card) && <FaCheck size={28} />}
-                        {(!showCards && !user.card) && <GiCardPlay size={28} />}
-                        {(showCards && !user.card) && <FaTimes size={28} />}                        
+                        {(room.showCards && user.card) && <div><h3>{user.card}</h3></div>}
+                        {(!room.showCards && user.card) && <FaCheck size={28} />}
+                        {(!room.showCards && !user.card) && <GiCardPlay size={28} />}
+                        {(room.showCards && !user.card) && <FaTimes size={28} />}                        
                         </>
                       )}
                     </div>

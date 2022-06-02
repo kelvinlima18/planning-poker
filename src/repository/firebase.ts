@@ -1,11 +1,11 @@
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc } from 'firebase/firestore';
-
+import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC_ScqUKNG_Oxg-8Ev7paFconbJDJ5EVOE",
   authDomain: "planning-poker-v001.firebaseapp.com",
+  databaseURL: "https://planning-poker-v001-default-rtdb.firebaseio.com",
   projectId: "planning-poker-v001",
   storageBucket: "planning-poker-v001.appspot.com",
   messagingSenderId: "1068527061199",
@@ -15,12 +15,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
-export const db = getFirestore(app);
 
-export const roomsCollectionRef = () => {
-  return collection(db, 'rooms');
-}
-
-export const usersCollectionRef = (roomId: string) => {
-  return collection(db, `rooms/${roomId}/users`);
-}
+export const database = getDatabase(app);

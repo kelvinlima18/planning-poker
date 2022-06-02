@@ -46,6 +46,7 @@ export const PokerBar = styled.aside`
       color: #e5e5e5;
       width: 100%;
       margin: 30px auto;
+      user-select: none;
 
       &::before {
         content: "";
@@ -293,9 +294,15 @@ export const PokerTable = styled.section`
       margin: 0;
       width: 100%;
 
+      > div:last-child {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        row-gap: 10px;
+      }
+
       .chosen-card {
         display: flex;
-        margin-top: 10px;
+        flex-direction: column;
 
         .card {
           display: flex;
@@ -311,20 +318,14 @@ export const PokerTable = styled.section`
           padding: 8px 6px;
         }
 
-        & + div {
-          margin-top: 20px;
-        }
-
         .amount {
+          margin-left: 8px;
+          margin-top: 3px;
           display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 18px;
+          text-align: center;
+          font-size: 12px;
           font-weight: 500;
           width: 100%;
-          background-color: #f9f9f9;
-          border-radius: 6px;
-          margin-left: 10px;
         }
       }
 
@@ -374,6 +375,7 @@ export const PokerTable = styled.section`
     margin-left: 20px;
     row-gap: 20px;
     height: fit-content;
+    user-select: none;
     
     .card-wrapper {
       display: flex;
@@ -392,6 +394,7 @@ export const PokerTable = styled.section`
         margin-right: 20px;
         box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 12%);
         padding: 8px;
+        user-select: none;
 
         div {
           width: 100%;
@@ -401,6 +404,7 @@ export const PokerTable = styled.section`
           display: flex;
           align-items: center;
           justify-content: center;
+          user-select: none;
 
           h3 {
             font-size: 32px;
@@ -409,12 +413,24 @@ export const PokerTable = styled.section`
           }
         }
 
-        &.up-card {
-          background-color: #00fff5;
+        &.card-selected {
+          background-color: #172B4D;
 
           div {
-            background-color: #00fff5;
+            background-color: #172B4D;
 
+            h3 {
+              color: #222831;
+            }
+          }
+        }
+
+        &.up-card {
+          background-color: #00fff5;
+          
+          div {
+            background-color: #00fff5;
+            
             h3 {
               color: #222831;
             }

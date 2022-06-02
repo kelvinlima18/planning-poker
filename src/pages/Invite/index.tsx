@@ -5,12 +5,12 @@ import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 
 import { Header } from '../../components/Header';
-import { db } from '../../repository/firebase';
 
-import { RoomData, UserData } from '../../types/user';
+import { UserData } from '../../types/user';
 
 import { Container } from './styles';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { ref, update } from 'firebase/database';
+import { database } from '../../repository/firebase';
 
 export const Invite: React.FC = () => {
   const { id: idParams } = useParams<{ id: string }>();
@@ -33,11 +33,6 @@ export const Invite: React.FC = () => {
       
       setLoadingButton(true);
       
-      const roomResponse = await getDoc(doc(db, 'rooms', id));
-      if (!roomResponse.exists()) throw new Error('Oops, essa sala não existe');
-
-      const room = roomResponse.data() as RoomData;
-      
       const userDataOnSpectator: UserData = {
         id: uuid(),
         username,
@@ -52,10 +47,13 @@ export const Invite: React.FC = () => {
       
       if (!id) return;
 
-      await setDoc(doc(db, `rooms/${room.id}/users`, userData.id), userData);
+      await update(ref(database, `rooms/${id}/users`), { 
+         [userData.id]: { ...userData } 
+      });
+
       sessionStorage.setItem('user-planning-poker', JSON.stringify(userData));
 
-      history.push(`/room/${room.id}`);
+      history.push(`/room/${id}`);
     } catch (error: any) {
       if (error.errors) {
         toast.error(error.errors[0]);

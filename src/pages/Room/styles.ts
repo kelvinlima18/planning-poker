@@ -409,6 +409,18 @@ export const PokerTable = styled.section`
           }
         }
 
+        &.selected-card {
+          background-color: #172B4D;
+
+          div {
+            background-color: #172B4D;
+
+            h3 {
+              color: #222831;
+            }
+          }
+        }
+
         &.up-card {
           background-color: #00fff5;
 
@@ -420,6 +432,7 @@ export const PokerTable = styled.section`
             }
           }
         }
+
 
         &.spectator-card {
           background-color: #f9f9f9;

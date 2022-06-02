@@ -7,11 +7,10 @@ import toast from 'react-hot-toast';
 import Select from '../../elements/Select';
 import { Header } from '../../components/Header';
 
-import { db } from '../../repository/firebase';
 import { RoomData, UserData } from '../../types/user';
 
 import { Container } from './styles';
-import { doc, setDoc } from 'firebase/firestore';
+import { getDatabase, ref, set } from 'firebase/database';
 
 export const Home: React.FC = () => {
   const [roomname, setRoomname] = useState('');
@@ -53,14 +52,19 @@ export const Home: React.FC = () => {
         ...userDataOnSpectator,
         card: ""
       }
-      
-      await setDoc(doc(db, 'rooms', roomData.id), roomData);
 
-      await setDoc(doc(db, `rooms/${roomData.id}/users`, userData.id), userData);
+      const database = getDatabase();
+
+      await set(ref(database, 'rooms/' + roomData.id), { 
+        ...roomData,
+        users: {
+         [userData.id]: { ...userData } 
+        }
+      });
+
       sessionStorage.setItem('user-planning-poker', JSON.stringify(userData));
-
       history.push(`/room/${roomData.id}`);
-
+      
       setTimeout(() => setLoadingButton(false), 1000);
     } catch (error: any) {
       if (error.errors) {

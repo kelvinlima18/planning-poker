@@ -1,21 +1,25 @@
-import { doc, getDocs, query, runTransaction, updateDoc, where } from 'firebase/firestore';
+import { getDatabase, onValue, ref, update } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
-import { useCollectionData, useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import toast from 'react-hot-toast';
-import { FaCheck, FaTimes, FaEye } from 'react-icons/fa';
-import { GiCardPlay } from 'react-icons/gi';
+import { FaTimes, FaEye } from 'react-icons/fa';
 import { ImClubs } from 'react-icons/im';
 import { useParams } from 'react-router';
 
-import { roomsCollectionRef, usersCollectionRef, db } from '../../repository/firebase';
 import { MatchDataInterface, RoomData, UserData } from '../../types/user';
 
 import { PokerRoom, PokerWrapper, PokerActions, PokerTable, PokerBar  } from './styles';
 
+interface RoomReal extends RoomData {
+  users: {
+    [key: string]: UserData;
+  };
+}
+
 export const Room: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const url = `${window.location.origin}/invite/${id}`;
-
+  
+  const database = getDatabase();
   const userStorage = sessionStorage.getItem('user-planning-poker');
   const loggedUser: UserData | undefined = userStorage ? JSON.parse(userStorage) : undefined;
 
@@ -37,24 +41,24 @@ export const Room: React.FC = () => {
     { card: '40', selected: false },
     { card: '100', selected: false },
   ]);
-
-  const [roomResponse] = useCollectionData(query(roomsCollectionRef(), where("id", "==", id)));
-  const [usersResponse] = useCollectionData(query(usersCollectionRef(id), where("id", "!=", null)));
   
   useEffect(() => {
-    if (roomResponse && roomResponse?.length > 0) {
-      setRoom({ ...roomResponse[0] }  as unknown as RoomData);
-    }
+      onValue(ref(database, 'rooms/' + id), (snapShot) => {
+        const { users: usersObject, ...rest }: RoomReal = snapShot.val();
 
-    setUsers(usersResponse as unknown as UserData[]);
-  }, [roomResponse, usersResponse]);
+        const usersList = Object.values(usersObject);
+
+        setRoom(rest);
+        setUsers(usersList);
+      })
+  }, [database, id]);
   
   useEffect(() => {
     const selectCardOnDatabase = async () => {
       const selectedCard = cards.find(card => card.selected);
 
       if (selectedCard && loggedUser) {
-        await updateDoc(doc(db, `rooms/${room.id}/users`, loggedUser?.id), { card: selectedCard.card })
+        await update(ref(database, `rooms/${id}/users/${loggedUser.id}`), { card: selectedCard.card });
       }
     }
 
@@ -71,6 +75,21 @@ export const Room: React.FC = () => {
           selected: false
         }
       }))
+    } else if (loggedUser) {
+      const userSelected = users.find(user => user.id === loggedUser.id);
+
+      if (userSelected?.card) {
+        setCards(prev => prev.map(item => {
+          if (item.card === userSelected.card) {
+            return {
+              ...item,
+              selected: true
+            }
+          }
+
+          return { ...item };
+        }))
+      }
     }
   }, [room.showCards]);
 
@@ -117,33 +136,25 @@ export const Room: React.FC = () => {
   }, [users]);
 
   const updateGameStatus = async (gameStarted: boolean) => {
-    await updateDoc(doc(db, 'rooms', room.id), { gameStarted });
+    await update(ref(database, `rooms/${id}`), { gameStarted });
   }
 
   const updateShowCards = async (showCards: boolean) => {
-    await updateDoc(doc(db, 'rooms', room.id), { showCards });
+    await update(ref(database, `rooms/${id}`), { showCards });
   }
 
   const resetGame = async () => {
     try {
-      const usersDocuments = getDocs(usersCollectionRef(room.id));
+      let userUpdates: any = {};
+      users.forEach(user => {
+        userUpdates[`${user.id}`] = {...user, card: ''}
+      });
 
-      (await usersDocuments).forEach(user => {
-        runTransaction(db, async (transaction) => {  
-          const documents = await transaction.get(user.ref);
-          
-          if (!documents.exists()) {
-            throw new Error('Documento inexistente')
-          }
-  
-          const resertCard = documents.data().card = '';
-          transaction.update(user.ref, { card: resertCard })
-        })
-      })
-
+      await update(ref(database, `rooms/${id}/users`), userUpdates);
     } catch (error: any) {
       toast.error(error.message);
     }
+
   }
 
   const selectCard = async (card: string) => {
@@ -160,8 +171,8 @@ export const Room: React.FC = () => {
   }
 
   const resetVotes = async () => {
-    await resetGame();
     await updateShowCards(false);
+    await resetGame();
   }
 
   const inviteGuest = () => {
@@ -314,12 +325,12 @@ export const Room: React.FC = () => {
                   })
                   .map((user: UserData) => (
                   <div className="card-wrapper">
-                    <div className={`card ${room.showCards && 'up-card'} ${user.isSpectator ? 'spectator-card' : ''}`}>
+                    <div 
+                      className={`card ${room.showCards ? 'up-card' : ''} ${user.card !== '' && 'selected-card'} ${user.isSpectator ? 'spectator-card' : ''}`}
+                    >
                       {user.isSpectator ? <FaEye size={28} /> : (
                         <>
                         {(room.showCards && user.card) && <div><h3>{user.card}</h3></div>}
-                        {(!room.showCards && user.card) && <FaCheck size={28} />}
-                        {(!room.showCards && !user.card) && <GiCardPlay size={28} />}
                         {(room.showCards && !user.card) && <FaTimes size={28} />}                        
                         </>
                       )}

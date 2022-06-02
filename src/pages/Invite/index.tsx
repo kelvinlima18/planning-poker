@@ -10,7 +10,8 @@ import { db } from '../../repository/firebase';
 import { RoomData, UserData } from '../../types/user';
 
 import { Container } from './styles';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+import {  getDatabase, ref, update } from 'firebase/database';
 
 export const Invite: React.FC = () => {
   const { id: idParams } = useParams<{ id: string }>();
@@ -52,7 +53,12 @@ export const Invite: React.FC = () => {
       
       if (!id) return;
 
-      await setDoc(doc(db, `rooms/${room.id}/users`, userData.id), userData);
+      const database = getDatabase();
+
+      await update(ref(database, `rooms/${id}/users`), { 
+         [userData.id]: { ...userData } 
+      });
+
       sessionStorage.setItem('user-planning-poker', JSON.stringify(userData));
 
       history.push(`/room/${room.id}`);

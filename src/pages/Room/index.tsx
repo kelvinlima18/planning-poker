@@ -145,6 +145,8 @@ export const Room: React.FC = () => {
 
   const resetGame = async () => {
     try {
+      await updateShowCards(false);
+
       let userUpdates: any = {};
       users.forEach(user => {
         userUpdates[`${user.id}`] = {...user, card: ''}
@@ -168,11 +170,6 @@ export const Room: React.FC = () => {
         return c;
       })
     );
-  }
-
-  const resetVotes = async () => {
-    await updateShowCards(false);
-    await resetGame();
   }
 
   const inviteGuest = () => {
@@ -233,7 +230,7 @@ export const Room: React.FC = () => {
                     if (!room.gameStarted && !room.showCards) {
                       await updateGameStatus(true);
                     } else {
-                      resetVotes();
+                      await resetGame();
                     }
                   }}
                   >
@@ -326,7 +323,8 @@ export const Room: React.FC = () => {
                   .map((user: UserData) => (
                   <div className="card-wrapper">
                     <div 
-                      className={`card ${room.showCards ? 'up-card' : ''} ${user.card !== '' && 'selected-card'} ${user.isSpectator ? 'spectator-card' : ''}`}
+                      className={
+                        `card ${room.showCards ? 'up-card' : 'down-card'} ${user.card ? 'card-selected' : ''} ${user.isSpectator ? 'spectator-card' : ''}`}
                     >
                       {user.isSpectator ? <FaEye size={28} /> : (
                         <>

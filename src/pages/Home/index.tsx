@@ -10,7 +10,8 @@ import { Header } from '../../components/Header';
 import { RoomData, UserData } from '../../types/user';
 
 import { Container } from './styles';
-import { getDatabase, ref, set } from 'firebase/database';
+import { ref, set } from 'firebase/database';
+import { database } from '../../repository/firebase';
 
 export const Home: React.FC = () => {
   const [roomname, setRoomname] = useState('');
@@ -52,8 +53,6 @@ export const Home: React.FC = () => {
         ...userDataOnSpectator,
         card: ""
       }
-
-      const database = getDatabase();
 
       await set(ref(database, 'rooms/' + roomData.id), { 
         ...roomData,

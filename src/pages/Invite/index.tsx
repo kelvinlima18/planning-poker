@@ -5,13 +5,12 @@ import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 
 import { Header } from '../../components/Header';
-import { db } from '../../repository/firebase';
 
-import { RoomData, UserData } from '../../types/user';
+import { UserData } from '../../types/user';
 
 import { Container } from './styles';
-import { doc, getDoc } from 'firebase/firestore';
-import {  getDatabase, ref, update } from 'firebase/database';
+import { ref, update } from 'firebase/database';
+import { database } from '../../repository/firebase';
 
 export const Invite: React.FC = () => {
   const { id: idParams } = useParams<{ id: string }>();
@@ -47,9 +46,6 @@ export const Invite: React.FC = () => {
       }
       
       if (!id) return;
-
-      const database = getDatabase();
-
 
       await update(ref(database, `rooms/${id}/users`), { 
          [userData.id]: { ...userData } 

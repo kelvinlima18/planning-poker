@@ -1,9 +1,10 @@
-import { getDatabase, onValue, ref, update } from 'firebase/database';
+import { onValue, ref, update } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaTimes, FaEye } from 'react-icons/fa';
 import { ImClubs } from 'react-icons/im';
 import { useParams } from 'react-router';
+import { database } from '../../repository/firebase';
 
 import { MatchDataInterface, RoomData, UserData } from '../../types/user';
 
@@ -19,7 +20,6 @@ export const Room: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const url = `${window.location.origin}/invite/${id}`;
   
-  const database = getDatabase();
   const userStorage = sessionStorage.getItem('user-planning-poker');
   const loggedUser: UserData | undefined = userStorage ? JSON.parse(userStorage) : undefined;
 

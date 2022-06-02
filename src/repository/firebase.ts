@@ -1,8 +1,6 @@
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection} from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyC_ScqUKNG_Oxg-8Ev7paFconbJDJ5EVOE",
@@ -18,17 +16,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
-// Firestore Database
-export const db = getFirestore(app);
-
-export const roomsCollectionRef = () => {
-  return collection(db, 'rooms');
-}
-
-export const usersCollectionRef = (roomId: string) => {
-  return collection(db, `rooms/${roomId}/users`);
-}
-
-// Realtime Database
-
-export const database = getDatabase();
+export const database = getDatabase(app);

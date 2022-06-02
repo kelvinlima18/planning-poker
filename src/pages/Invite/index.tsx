@@ -34,11 +34,6 @@ export const Invite: React.FC = () => {
       
       setLoadingButton(true);
       
-      const roomResponse = await getDoc(doc(db, 'rooms', id));
-      if (!roomResponse.exists()) throw new Error('Oops, essa sala não existe');
-
-      const room = roomResponse.data() as RoomData;
-      
       const userDataOnSpectator: UserData = {
         id: uuid(),
         username,
@@ -55,13 +50,14 @@ export const Invite: React.FC = () => {
 
       const database = getDatabase();
 
+
       await update(ref(database, `rooms/${id}/users`), { 
          [userData.id]: { ...userData } 
       });
 
       sessionStorage.setItem('user-planning-poker', JSON.stringify(userData));
 
-      history.push(`/room/${room.id}`);
+      history.push(`/room/${id}`);
     } catch (error: any) {
       if (error.errors) {
         toast.error(error.errors[0]);

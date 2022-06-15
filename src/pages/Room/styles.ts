@@ -133,6 +133,10 @@ export const PokerBar = styled.aside`
       }
     }
   }
+
+  @media only screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 export const PokerWrapper = styled.section`
@@ -153,6 +157,8 @@ export const PokerActions = styled.header`
   border-radius: 10px 10px 0 0;
   padding: 20px;
   border-bottom: 1px solid #dddddd;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   .host-actions {
     display: flex;
@@ -175,6 +181,12 @@ export const PokerActions = styled.header`
 
       & + button {
         margin-left: 10px;
+        background-color: #00fff5;
+        color: #222831;
+
+        &:hover {
+          background-color: #00adb5;
+        }
       }
     }
   }
@@ -220,6 +232,14 @@ export const PokerActions = styled.header`
       border: 1px solid buttonface;
       border-radius: 6px;
       background-color: #ffffff;
+    }
+  }
+
+  @media only screen and (max-width: 800px) {
+    h1 {
+      display: flex;
+      margin: 0 20px;
+      min-width: fit-content;
     }
   }
 `;
@@ -450,6 +470,16 @@ export const PokerTable = styled.section`
         max-width: 100%;
         text-align: center;
       }
+    }
+  }
+
+  @media only screen and (max-width: 800px) {
+    flex-direction: column;
+    overflow: scroll;
+
+    section {
+      margin-top: 20px;
+      margin-left: 0;
     }
   }
 `;

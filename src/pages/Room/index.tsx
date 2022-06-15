@@ -257,7 +257,7 @@ export const Room: React.FC = () => {
 
             <PokerTable>
               <aside>
-                {!room.showCards ? (
+                {loggedUser.usertype !== 'HOST' && !loggedUser.isSpectator || !room.showCards ? (
                   <div className="cards-list">
                     {cards.map(item => (
                       <button
@@ -302,7 +302,6 @@ export const Room: React.FC = () => {
                   {!room.gameStarted && 'Aguardando organizador iniciar a votação'}
                 </p>
               </aside>
-
                   
               <section>
                 {users && users

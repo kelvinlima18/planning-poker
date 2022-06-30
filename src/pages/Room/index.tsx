@@ -160,6 +160,8 @@ export const Room: React.FC = () => {
   }
 
   const selectCard = async (card: string) => {
+    sessionStorage.setItem('user-planning-poker', JSON.stringify({...loggedUser, card}))
+
     setCards(prev => prev.map(c => {
         if (c.card === card) {
           c.selected = true;
@@ -172,21 +174,10 @@ export const Room: React.FC = () => {
     );
   }
 
-  const inviteGuest = () => {
-    const urlInvite = document.createElement('input');
-    const container = document.getElementById('invite-wrapper');
-
-    const inputAlreadyExists = container!.getElementsByClassName('invite-link');
-
-    if (inputAlreadyExists.length > 0) return;
-
-    container!.appendChild(urlInvite);
-    urlInvite.className = 'invite-link';
-    urlInvite.value = url;
-    urlInvite.select();
-    document.execCommand('copy');
-    urlInvite.focus();
-    urlInvite.disabled = true;
+  const inviteGuest = async () => {
+    navigator.clipboard.writeText(url)
+      .then(() => toast.success('Link de invite copiado!'))
+      .catch(() => toast.error('Tente novamente!'));    
   }
 
   return (
@@ -229,22 +220,19 @@ export const Room: React.FC = () => {
                   onClick={async () => {
                     if (!room.gameStarted && !room.showCards) {
                       await updateGameStatus(true);
-                    } else {
+                    } else if (room.gameStarted && room.showCards) {
                       await resetGame();
+                    } else {
+                      await updateShowCards(true);
                     }
                   }}
                   >
-                    {room.gameStarted ? 'Reiniciar Votação' : 'Iniciar Votação'}
+                    {room.gameStarted 
+                      ? (room.showCards 
+                        ? 'Reiniciar votação' 
+                        : 'Revelar votos') 
+                      : 'Iniciar Votação'}
                   </button>
-                  {(users && users.some((item: UserData) => item.card !== '') && !room.showCards && room.gameStarted) && (
-                    <button 
-                      type="button"
-                      className="show-cards" 
-                      onClick={async () => await updateShowCards(true)}
-                    >
-                      Revelar votos
-                    </button>
-                  )}
                 </section>
               )}
 
@@ -257,9 +245,9 @@ export const Room: React.FC = () => {
 
             <PokerTable>
               <aside>
-                {loggedUser.usertype !== 'HOST' && !loggedUser.isSpectator || !room.showCards ? (
+                {!room.showCards ? (
                   <div className="cards-list">
-                    {cards.map(item => (
+                    {loggedUser.usertype !== 'HOST' ? cards.map(item => (
                       <button
                         disabled={!room.gameStarted || loggedUser.isSpectator}
                         type="button" 
@@ -269,7 +257,16 @@ export const Room: React.FC = () => {
                         {(room.gameStarted && !loggedUser.isSpectator) ? item.card : <ImClubs size={18} color="#222831" />}
                       </button>
 
-                  ))}
+                  )) : (
+                    <p>
+                      {users.filter(user => !user.isSpectator).every(item => item.card !== '') 
+                        ? 'Votação finalizada' 
+                        : !room.gameStarted 
+                          ? 'Agurdando o inicio da votação'
+                          : 'Aguarde os participantes finalizarem a votação'
+                      }
+                    </p>
+                  )}
                 </div>
                 ) : (
                   <section>
@@ -298,8 +295,17 @@ export const Room: React.FC = () => {
                   </section>
                 )}
                 <p>
-                  {(room.gameStarted && !room.showCards) && 'Escolha a sua carta'}
-                  {!room.gameStarted && 'Aguardando organizador iniciar a votação'}
+                  {!loggedUser.isSpectator && loggedUser.usertype === 'PLAYER' ? (
+                    <>
+                      {(room.gameStarted && !room.showCards && loggedUser.card === '') && 'Escolha a sua carta'}
+                      {!room.gameStarted && 'Aguardando organizador iniciar a votação'}
+                    </>
+                  ) : (
+                    !loggedUser.isSpectator && (users.filter(user => !user.isSpectator).every(item => item.card !== '') 
+                      ? 'Pronto! Votação finalizada' 
+                      : 'Aguarde os participantes finalizarem a votação')
+                      
+                  )}
                 </p>
               </aside>
                   

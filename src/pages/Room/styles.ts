@@ -264,12 +264,14 @@ export const PokerTable = styled.section`
     box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 12%);
     height: fit-content;
     min-width: 300px;
+    min-height: 300px;
 
     .cards-list {
       display: grid;
       row-gap: 25px;
       column-gap: 40px;
       grid-template-columns: 50px 50px 50px;
+      position: relative;
     
       button {
         display: flex;
@@ -305,6 +307,15 @@ export const PokerTable = styled.section`
             background-color: #00fff5;
           }
         }
+      }
+      
+      p {
+        position: absolute;
+        width: 100%;
+        max-width: 100%;
+        margin: auto;
+        margin-top: 40%;
+        padding: 0;
       }
     }
     
@@ -386,6 +397,14 @@ export const PokerTable = styled.section`
       color: #222831;
       text-align: center;
     }
+
+    @media only screen and (max-width: 800px) {
+      min-height: 200px;
+
+      .cards-list p {
+        margin-top: 30%;
+      }
+    } 
   }
 
   section {

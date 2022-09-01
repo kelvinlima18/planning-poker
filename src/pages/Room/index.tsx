@@ -156,7 +156,6 @@ export const Room: React.FC = () => {
     } catch (error: any) {
       toast.error(error.message);
     }
-
   }
 
   const selectCard = async (card: string) => {

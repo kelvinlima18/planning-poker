@@ -10,9 +10,12 @@ interface TableAreaProps {
 export const TableArea: React.FC<TableAreaProps> = ({ users }) => {
   return (
     <Container>
-      <div>
+      <div className='cards-content'>
         {users.map(user => (
-          user.username
+          <div className="user-card">
+            <div className="card" />
+            <p>{user.username}</p>
+          </div>
         ))}
       </div>
     </Container>

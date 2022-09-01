@@ -5,15 +5,36 @@ export const Container = styled.section`
   width: 100%;
   height: 100%;
 
-  div {
+  .cards-content {
     display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
     background-color: #ffffff;
-    box-shadow: 0px 2px 10px rgb(39 41 45 / 8%);
     width: 600px;
     height: 250px;
-    border-radius: 16px;
+    border-radius: 8px;
     padding: 10px;
-    margin: 180px auto 0;
+    margin: 20px auto 0;
+    border: 1px solid #E0DFDC;
+
+    .user-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      
+      .card {
+        width: 56px;
+        height: 72px;
+        border-radius: 4px;
+        background-color: #ccc;
+      }
+
+      p {
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+
   }
 
   @media only screen and (max-width: 900px) {

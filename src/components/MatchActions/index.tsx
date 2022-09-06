@@ -8,19 +8,14 @@ import { database } from '../../repository/firebase';
 
 import { Container } from './styles';
 import { RoomData, UserData } from '../../types/user';
-interface MatchActionsProps {
-  users: UserData[];
-  room: RoomData;
-}
+import { usePoker } from '../../hooks/usePoker';
 
-export const MatchActions: React.FC<MatchActionsProps> = ({
-  users,
-  room,
-}) => {
-  const { id } = useParams<{ id: string }>();
+export const MatchActions: React.FC = () => {
+  const { room, users, loggedUser } = usePoker();
+
 
   const updateShowCards = async (showCards: boolean) => {
-    await update(ref(database, `rooms/${id}`), { showCards });
+    await update(ref(database, `rooms/${room.id}`), { showCards });
   } 
 
   const resetGame = async () => {
@@ -32,7 +27,7 @@ export const MatchActions: React.FC<MatchActionsProps> = ({
         userUpdates[`${user.id}`] = {...user, card: ''}
       });
 
-      await update(ref(database, `rooms/${id}/users`), userUpdates);
+      await update(ref(database, `rooms/${room.id}/users`), userUpdates);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -40,7 +35,7 @@ export const MatchActions: React.FC<MatchActionsProps> = ({
 
   const matchAction = async () => {
     if (!room.gameStarted && !room.showCards) {
-      await update(ref(database, `rooms/${id}`), { gameStarted: true });
+      await update(ref(database, `rooms/${room.id}`), { gameStarted: true });
     } else if (room.gameStarted && !room.showCards) {
       await updateShowCards(true);
     } else if (room.gameStarted && room.showCards) {
@@ -63,8 +58,21 @@ export const MatchActions: React.FC<MatchActionsProps> = ({
   return (
     <Container>
       <div className="match-actions-content">
-        <button type="button" onClick={() => matchAction()}>
-          {labelButtonAction()}
+        {loggedUser?.usertype === 'HOST' && (
+          <>
+            <button type="button" onClick={() => matchAction()}>
+              {labelButtonAction()}
+            </button>
+            <button type="button">
+              Cronômetro (BETA)
+            </button>
+          </>
+        )}
+        <button 
+          type="button"
+          disabled
+        >
+          EM BREVE
         </button>
       </div>
     </Container>

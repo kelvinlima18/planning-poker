@@ -3,29 +3,46 @@ import styled from 'styled-components';
 
 export const Container = styled.footer`
   display: flex;
-  width: 100%;
-  height: 240px;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 250px;
   padding: 20px 0;
   justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   background-color: #ffffff;
-  border: 1px solid #E0DFDC;
-  border-radius: 8px;
+
+  > h3 {
+    position: absolute;
+    top: 60px;
+  }
 
   .cards-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    .status-box {
-      margin: 0 auto;
-    }
+    margin: auto auto 20px;
 
     .cards-list {
       display: flex;
-      width: 600px;
+      width: 800px;
       flex-wrap: wrap;
       justify-content: space-between;
     }
+  }
+
+  .status-box {
+    background-color: #e9e9e9;
+    padding: 20px;
+    border-radius: 8px;
+    position: absolute;
+    top: -25px;
+    box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 40%);
+    font-size: 12px;
+    font-weight: 500;
   }
 `;
 
@@ -33,10 +50,10 @@ export const Card = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  width: 48px;
   padding: 5px;
-  height: 56px;
-  border-radius: 8px;
+  height: 64px;
+  border-radius: 6px;
   border: 2px solid ${darken(0.1, '#E0DFDC')};
   background-color: #ffffff;
   position: relative;
@@ -78,16 +95,37 @@ export const Card = styled.button`
     font-weight: 500;
   }
 
-  &:hover {
-    border: 2px solid #1f008b;
+  .amount-card-chosed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 2px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #F59F85;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+  }
+
+  &:hover, &.card-selected {
+    border: 2px solid #F59F85;
 
     .up-corner, .down-corner {
-      color: #1f008b;
+      color: #F59F85;
     }
 
     .middle {
-      background-color: ${lighten(0.6, '#1f008b')};
-      color: #1f008b;
+      background-color: ${lighten(0.4, '#F59F85')};
+      color: #F59F85;
     }
-  } 
+  }
+
+  &:disabled {
+    pointer-events: none;
+  }
 `;

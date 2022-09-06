@@ -4,18 +4,18 @@ import { lighten } from 'polished';
 
 export const Container = styled.aside`
   width: 100%;
-  margin-top: 40px;
 
   .match-actions-content {
+    display: flex;
+    justify-content: center;
     border-radius: 4px;
     padding: 4px;
     
     button {
-      margin: auto;
       display: flex;
       padding: 0 10px;
       height: 32px;
-      background-color: #1f008b;
+      background-color: #5060A3;
       border: 0;
       border-radius: 8px;
       justify-content: center;
@@ -23,10 +23,15 @@ export const Container = styled.aside`
       font-size: 12px;
       font-weight: 400;
       color: #ffffff;
+      transition: background-color 0.4s;
 
           
       &:hover {
-        background-color: ${lighten(0.15, '#1f008b')};
+        background-color: ${lighten(0.04, '#5060A3')};
+      }
+
+      & + button {
+        margin-left: 20px;
       }
     }
   }

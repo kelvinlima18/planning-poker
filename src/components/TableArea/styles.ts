@@ -1,20 +1,22 @@
+import { lighten } from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.section`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 310px);
+  margin-top: 40px;
 
   .cards-content {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 16px;
     background-color: #ffffff;
-    width: 600px;
-    height: 250px;
-    border-radius: 8px;
-    padding: 10px;
-    margin: 20px auto 0;
+    width: 800px;
+    height: 300px;
+    border-radius: 150px;
+    padding: 20px 100px;
+    margin: auto;
     border: 1px solid #E0DFDC;
 
     .user-card {
@@ -23,10 +25,23 @@ export const Container = styled.section`
       align-items: center;
       
       .card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 56px;
         height: 72px;
         border-radius: 4px;
         background-color: #ccc;
+
+        p {
+          font-size: 22px;
+          font-weight: 600;
+          color: #ffffff;
+        }
+
+        &.selected {
+          background-color: #F59F85;
+        }
       }
 
       p {

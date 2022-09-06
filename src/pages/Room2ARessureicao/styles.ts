@@ -7,7 +7,7 @@ export const RoomContainer = styled.main`
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  background-color: #E5E5E5;
+  background-color: #5060A3;
 `;
 
 export const RoomContent = styled.div`
@@ -22,6 +22,18 @@ export const RoomContent = styled.div`
 
 export const RoomActions = styled.header`
   display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #ffffff;
+  width: 100vw;
+  padding: 10px;
+
+  > div {
+    display: flex;
+    width: 1128px;
+    margin: auto;
+  }
 
   h4 {
     display: flex;
@@ -42,14 +54,14 @@ export const RoomActions = styled.header`
     font-size: 12px;
     border-radius: 8px;
     border: 0;
-    background-color: #1f008b;
+    background-color: #F59F85;
     color: #ffffff;
     font-weight: 500;
     transition: background-color 0.5s;
     
     
     &:hover {
-      background-color: ${lighten(0.15, '#1f008b')};
+      background-color: ${lighten(0.15, '#F59F85')};
     }
   }
 

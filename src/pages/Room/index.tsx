@@ -42,6 +42,7 @@ export const Room: React.FC = () => {
     { card: '100', selected: false },
   ]);
   
+  // OK
   useEffect(() => {
       onValue(ref(database, 'rooms/' + id), (snapShot) => {
         const { users: usersObject, ...rest }: RoomReal = snapShot.val();
@@ -53,6 +54,7 @@ export const Room: React.FC = () => {
       })
   }, [database, id]);
   
+  // OK
   useEffect(() => {
     const selectCardOnDatabase = async () => {
       const selectedCard = cards.find(card => card.selected);
@@ -93,6 +95,7 @@ export const Room: React.FC = () => {
     }
   }, [room.showCards]);
 
+  // TODO
   useEffect(() => {
     const loadPokerData = () => {
       const data: any[] = [];

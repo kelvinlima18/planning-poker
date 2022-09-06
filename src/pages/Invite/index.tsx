@@ -20,7 +20,7 @@ export const Invite: React.FC = () => {
   const [loadingButton, setLoadingButton] = useState(false);
 
   const history = useHistory();
-  
+
   const joinRoom = async (event: FormEvent) => {
     event.preventDefault();
     

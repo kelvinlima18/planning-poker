@@ -28,7 +28,7 @@ export const CardsReports: React.FC = () => {
   const [matchData, setMatchData] = useState<MatchDataInterface>({} as MatchDataInterface);
 
   const selectCardOnDatabase = async (cardSelected: string) => {
-    const selectedCard = cards.find(item => item.card === cardSelected);
+    const selectedCard = cards && cards.find(item => item.card === cardSelected);
 
     if (selectedCard && loggedUser) {
       sessionStorage.setItem('user-planning-poker', JSON.stringify({...loggedUser, card: cardSelected}))
@@ -46,6 +46,20 @@ export const CardsReports: React.FC = () => {
 
       await update(ref(database, `rooms/${room.id}/users/${loggedUser.id}`), { card: cardSelected });
     }
+  }
+
+  const renderQuantityChosenCards = (card: string) => {
+    const cardChosed = matchData.chosenCards.find(item => item.card === card);
+
+    if (cardChosed && room.showCards) {
+      return (
+        <div className="amount-card-chosed">
+          {cardChosed.amount}
+        </div>
+      );
+    }
+
+    return null;
   }
 
   useEffect(() => {
@@ -90,19 +104,11 @@ export const CardsReports: React.FC = () => {
     loadPokerData();
   }, [users]);
 
-  const renderQuantityChosenCards = (card: string) => {
-    const cardChosed = matchData.chosenCards.find(item => item.card === card);
-
-    if (cardChosed) {
-      return (
-        <div className="amount-card-chosed">
-          {cardChosed.amount}
-        </div>
-      );
+  useEffect(() => {
+    if (!room.showCards && room.gameStarted) {
+      setCards(prev => prev.map(item => ({ ...item, selected: false })));
     }
-
-    return null;
-  }
+  }, [room])
 
   return (
     <Container>
@@ -115,16 +121,16 @@ export const CardsReports: React.FC = () => {
       )}
 
       <div className="cards-wrapper">
-        <div className="cards-list" id="cards-poker-list">
+        <div className="cards-list">
           {cards.map(item => (
             <Card
-              id={`card-${item.card}`}
               type="button"
-              className={item.selected && !room.showCards ? 'card-selected' : ''}
-              disabled={!room.gameStarted || room.showCards || loggedUser?.isSpectator}
+              faceCard={!room.gameStarted || room.showCards ? 'down' : 'up'}
+              isSpectator={loggedUser?.isSpectator ?? false}
+              selected={item.selected}
               onClick={() => selectCardOnDatabase(item.card)}
             >
-              {(room.gameStarted && !loggedUser?.isSpectator || room.showCards) 
+              {(room.gameStarted && !loggedUser?.isSpectator || room.showCards)
                 ? (
                   <>
                     {renderQuantityChosenCards(item.card)}

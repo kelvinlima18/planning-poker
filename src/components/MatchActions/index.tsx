@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { update, ref } from 'firebase/database';
@@ -7,7 +6,6 @@ import { update, ref } from 'firebase/database';
 import { database } from '../../repository/firebase';
 
 import { Container } from './styles';
-import { RoomData, UserData } from '../../types/user';
 import { usePoker } from '../../hooks/usePoker';
 
 export const MatchActions: React.FC = () => {

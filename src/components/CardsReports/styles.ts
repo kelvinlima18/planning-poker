@@ -1,5 +1,26 @@
 import { darken, lighten } from 'polished';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface CardProps {
+  faceCard: 'down' | 'up';
+  isSpectator: boolean;
+  selected: boolean;
+}
+
+const activeCard = () => {
+  return css`
+    border: 2px solid #F59F85;
+
+    .up-corner, .down-corner {
+      color: #F59F85;
+    }
+
+    .middle {
+      background-color: ${lighten(0.2, '#F59F85')};
+      color: #F59F85;
+    }
+  `;
+}
 
 export const Container = styled.footer`
   display: flex;
@@ -46,7 +67,7 @@ export const Container = styled.footer`
   }
 `;
 
-export const Card = styled.button`
+export const Card = styled.button<CardProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,20 +133,19 @@ export const Card = styled.button`
     color: #ffffff;
   }
 
-  &:hover, &.card-selected {
-    border: 2px solid #F59F85;
-
-    .up-corner, .down-corner {
-      color: #F59F85;
-    }
-
-    .middle {
-      background-color: ${lighten(0.4, '#F59F85')};
-      color: #F59F85;
-    }
+  &:hover {
+    ${activeCard()}
   }
 
-  &:disabled {
-    pointer-events: none;
-  }
+  ${({ faceCard, isSpectator, selected }): any => {
+    if (faceCard === 'down' || isSpectator) {
+      return css`
+        pointer-events: none;
+      `;
+    }
+
+    if (selected) {
+      return activeCard();
+    }
+  }}
 `;

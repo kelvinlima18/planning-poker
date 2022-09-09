@@ -32,15 +32,12 @@ export const Container = styled.section`
         height: 72px;
         border-radius: 4px;
         background-color: #ccc;
+        transition: all 0.4s;
 
         p {
           font-size: 22px;
           font-weight: 600;
           color: #ffffff;
-        }
-
-        &.selected {
-          background-color: #F59F85;
         }
       }
 

@@ -106,9 +106,10 @@ export const CardsReports: React.FC = () => {
 
   useEffect(() => {
     if (!room.showCards && room.gameStarted) {
+      console.log('putz');
       setCards(prev => prev.map(item => ({ ...item, selected: false })));
     }
-  }, [room])
+  }, [room.showCards, room.gameStarted])
 
   return (
     <Container>

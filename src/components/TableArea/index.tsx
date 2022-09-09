@@ -22,7 +22,12 @@ export const TableArea: React.FC = () => {
       <div className='cards-content'>
         {users.sort(orderCards).map(user => (
           <div className="user-card">
-            <div className={`${room.showCards ? 'up-card' : ''} card ${user.card ? 'selected' : ''}`}>
+            <div
+               className="card"
+               style={{
+                backgroundColor: user.card ? '#F59F85' : ''
+               }}
+              >
               {user.isSpectator ? <FaEye size={22} color="#6b6b6b" /> : (
                 <>
                   {(room.showCards && user.card) && <p>{user.card}</p>}

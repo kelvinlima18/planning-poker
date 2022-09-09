@@ -78,7 +78,6 @@ export const Card = styled.button<CardProps>`
   border: 2px solid ${darken(0.1, '#E0DFDC')};
   background-color: #ffffff;
   position: relative;
-  transition: all 0.4s;
 
   .up-corner, .down-corner {
     position: absolute;

@@ -26,6 +26,7 @@ export const CardsReports: React.FC = () => {
     { card: '100', selected: false },
   ]);
   const [matchData, setMatchData] = useState<MatchDataInterface>({} as MatchDataInterface);
+  // const [labelStatusGame, setlabelStatusGame] = useState('Aguardando o inicio da votação');
 
   const selectCardOnDatabase = async (cardSelected: string) => {
     const selectedCard = cards && cards.find(item => item.card === cardSelected);
@@ -61,6 +62,40 @@ export const CardsReports: React.FC = () => {
 
     return null;
   }
+
+  const debounce = (func: Function, timeout = 1000) => {
+    let timer: any = null;
+    return ({...args}) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  }
+
+  // const handleLabelStatusGame = () => {
+  //   if (!loggedUser) return;
+
+  //   const usersPlayers = users.filter(user => !user.isSpectator);
+        
+  //   if (loggedUser.usertype === 'HOST') {
+  //     const lastUserVotting = usersPlayers.filter(user => !user.card);
+
+  //     if (room.showCards && usersPlayers.every(user => user.card)) setlabelStatusGame('Resultado da votação');
+  //     if (lastUserVotting.length === 1) setlabelStatusGame(`${lastUserVotting[0].username} ainda não votou`);
+  //     if (usersPlayers.every(user => !user.card)) setlabelStatusGame('Os participantes ainda não iniciaram a votação');
+  //     if (usersPlayers.every(user => user.card)) setlabelStatusGame('Os participantes finalizaram a votação');
+  //     if (usersPlayers.some(user => user.card)) setlabelStatusGame('Os participantes iniciaram a votação');
+  //   }
+
+  //   if (loggedUser.usertype === 'PLAYER') {
+  //     if (room.gameStarted && !room.showCards) setlabelStatusGame('Escolha a sua carta');
+  //   }
+
+  //   setlabelStatusGame('Resultado da votação');
+  // }
+
+  // useEffect(() => {
+  //   debounce(handleLabelStatusGame, 500);
+  // }, [room, users]);
 
   useEffect(() => {
     const loadPokerData = () => {
@@ -106,16 +141,15 @@ export const CardsReports: React.FC = () => {
 
   useEffect(() => {
     if (!room.showCards && room.gameStarted) {
-      console.log('putz');
       setCards(prev => prev.map(item => ({ ...item, selected: false })));
     }
   }, [room.showCards, room.gameStarted])
 
   return (
     <Container>
-      <div className="status-box">
-        Escolha a sua carta
-      </div>
+      {/* <div className="status-box">
+        {labelStatusGame}
+      </div> */}
 
       {(matchData.media >= 0 && room.showCards) && (
         <h3>Média: {matchData.media}</h3>

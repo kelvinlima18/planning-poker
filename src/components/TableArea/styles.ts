@@ -49,13 +49,37 @@ export const Container = styled.section`
 
   }
 
-  @media only screen and (max-width: 900px) {
+  @media only screen and (max-width: 1100px) {
+    width: 100vw;
     justify-content: flex-start;
+    padding: 0 20px;
 
-    div {
-      width: calc(100vw - 100px);
-      margin-top: 100px;
-      margin-left: 80px;
+    .cards-content {
+      max-width: 800px;
+      width: 100%;
+      border-radius: 30px;
+      padding: 20px;
+      justify-content: center;
+      height: auto;
+
+      @media only screen and (max-width: 700px) {
+        .user-card {
+          height: fit-content;
+
+          .card {
+            width: 48px;
+            height: 64px;
+          }
+
+          p {
+            font-size: 10px;
+            max-width: fit-content;
+            word-break: normal;
+            text-align: center;
+          }
+        }  
+      }
     }
   }
+
 `;

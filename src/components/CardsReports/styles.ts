@@ -65,6 +65,25 @@ export const Container = styled.footer`
     font-size: 12px;
     font-weight: 500;
   }
+
+  @media only screen and (max-width: 900px) {
+    height: 300px;
+
+    h3 {
+      top: 30px;
+    }
+
+    .cards-wrapper {
+      margin: 60px auto auto;
+      max-width: 100vw;
+
+      .cards-list {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+      }
+    }
+  }
 `;
 
 export const Card = styled.button<CardProps>`

@@ -17,6 +17,11 @@ export const RoomContent = styled.div`
   height: 100%;
   margin: auto;
   padding: 20px;
+
+  @media only screen and (max-width: 1128px) {
+    width: 100vw;
+    padding: 0;
+  }
 `;
 
 

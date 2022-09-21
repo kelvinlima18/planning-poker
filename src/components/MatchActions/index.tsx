@@ -61,9 +61,6 @@ export const MatchActions: React.FC = () => {
             <button type="button" onClick={() => matchAction()}>
               {labelButtonAction()}
             </button>
-            <button type="button">
-              Cronômetro (BETA)
-            </button>
           </>
         )}
         <button 

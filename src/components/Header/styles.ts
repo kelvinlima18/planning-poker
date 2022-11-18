@@ -53,18 +53,20 @@ export const Container = styled.header`
       }
     }
 
-    button {
-      background-color: #00fff5;
+    > a {
+      color: #00fff5;
+      text-decoration: none;
       padding: 7px 26px;
       border: 0;
       border-radius: 6px;
-      color: #222831;
       font-size: 12px;
+      background-color: #222831;
       font-weight: 600;
-      transition: background-color 0.4s;
+      transition: color 0.4s;
+      cursor: pointer;
 
       &:hover {
-        background-color: #00adb5;
+        color: #00adb5;
       }
     }
   }

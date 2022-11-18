@@ -14,9 +14,9 @@ export const Header: React.FC = () => {
           <a href="/invite">Entrar em uma sala</a>
         </nav>
 
-        <button type="button">
-          Entrar
-        </button>
+        <a href="/entrar">
+          Entrar / Cadastrar
+        </a>
       </section>
     </Container>
   );

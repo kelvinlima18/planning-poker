@@ -8,7 +8,9 @@ export const App: React.FC = () => {
   return (
     <>
       <Routes />
-      <Toaster toastOptions={{style: {marginTop: 20}}} />
+      <Toaster toastOptions={{
+          style: { marginTop: 20 },
+        }} />
       <GlobalStyle />
     </>
   );
